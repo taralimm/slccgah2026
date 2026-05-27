@@ -1,0 +1,6 @@
+{
+  "name": "SLCC GAH 2026 Online Registration",
+  "description": "Online registration and admin payment verification dashboard for the SLCC Grand Alumni Homecoming 2026: 90's Bash.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
