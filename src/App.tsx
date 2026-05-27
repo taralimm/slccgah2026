@@ -38,7 +38,7 @@ const ACTIVITIES_DATA = [
     category: "Fundraising Activity",
     description: "Match up and smash at the court! In cooperation with SLSM Batch 01 - Alumni. Our pioneer pickleball gathering seeks to build camaraderie among alumni while raising funds for Homecoming.",
     details: "Reg Fee: ₱800. Free commemorative jersey if registered before May 31, 2026. Executive Level: Mens/Mixed/Womens Low (Prize: 5k, 3k, 2k). Invitational Level: Mixed Low & Mens Low (Prize: 5k, 3k, 2k), Mens Intermediate (Prize: 8k, 5k, 3k). Location: Saint Louis College of Cebu Gymnasium. Contact: REX 0992 734 0142. Powered by BAX, XP, PROTECH XP.",
-    image: "/src/assets/images/slcc_gah_promo_1779790415288.png" // Use official generated poster as featured image
+    image: "/src/assets/images/SLCC%20Pickleball%20event%20banner.jpg" // Use official generated poster as featured image
   },
   {
     id: 'musicfest',
@@ -827,7 +827,7 @@ export default function App() {
                   <div className="flex flex-col lg:flex-row gap-8 items-center bg-slate-50 p-6 sm:p-8 rounded-2xl border border-slate-100">
                     <div className="w-full lg:w-1/2 rounded-xl overflow-hidden aspect-[16/10] bg-slate-200">
                       <img 
-                        src="/src/assets/images/slcc_gah_promo_1779790415288.png" 
+                        src="/src/assets/images/SLCC%20Pickleball%20event%20banner.jpg" 
                         alt="Pickleball Tournament Poster" 
                         className="w-full h-full object-cover"
                       />
