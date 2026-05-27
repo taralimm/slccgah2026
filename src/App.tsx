@@ -99,7 +99,27 @@ const SPONSORS_DATA = [
 ];
 
 export default function App() {
-  const [currentTab, setCurrentTab] = useState<'home' | 'activities' | 'gallery' | 'contact' | 'register' | 'admin'>('home');
+  // Helper to get tab from pathname
+  const getTabFromPath = () => {
+    if (typeof window === 'undefined') return 'home';
+    const path = window.location.pathname.replace(/^\/|\/$/g, '').toLowerCase();
+    if (['activities', 'gallery', 'contact', 'register', 'admin'].includes(path)) {
+      return path as any;
+    }
+    return 'home';
+  };
+
+  const [currentTab, setCurrentTab] = useState<'home' | 'activities' | 'gallery' | 'contact' | 'register' | 'admin'>(getTabFromPath());
+
+  const navigateToTab = (tab: 'home' | 'activities' | 'gallery' | 'contact' | 'register' | 'admin') => {
+    setCurrentTab(tab);
+    const newPath = tab === 'home' ? '/' : `/${tab}`;
+    if (window.location.pathname !== newPath) {
+      window.history.pushState({ tab }, '', newPath);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
@@ -209,17 +229,32 @@ export default function App() {
     fetch('/api/stats').then(res => res.json()).then(data => setAdminStats(data)).catch(console.error);
   }, []);
 
-  // Sync tab selector with URL location hash
+  // Sync tab selector with URL location path and hash
   useEffect(() => {
-    const handleHashSync = () => {
+    const handleUrlSync = () => {
+      // Check pathname first
+      const path = window.location.pathname.replace(/^\/|\/$/g, '').toLowerCase();
+      if (['activities', 'gallery', 'contact', 'register', 'admin'].includes(path)) {
+        setCurrentTab(path as any);
+        return;
+      }
+      
+      // Check hash as fallback
       const hash = window.location.hash.replace('#', '').toLowerCase();
-      if (['home', 'activities', 'gallery', 'contact', 'register', 'admin'].includes(hash)) {
+      if (['activities', 'gallery', 'contact', 'register', 'admin'].includes(hash)) {
         setCurrentTab(hash as any);
+      } else {
+        setCurrentTab('home');
       }
     };
-    handleHashSync();
-    window.addEventListener('hashchange', handleHashSync);
-    return () => window.removeEventListener('hashchange', handleHashSync);
+
+    handleUrlSync();
+    window.addEventListener('popstate', handleUrlSync);
+    window.addEventListener('hashchange', handleUrlSync);
+    return () => {
+      window.removeEventListener('popstate', handleUrlSync);
+      window.removeEventListener('hashchange', handleUrlSync);
+    };
   }, []);
 
   // Sync admin authentication
@@ -467,7 +502,7 @@ export default function App() {
             {/* Branding Logo */}
             <div 
               className="flex items-center gap-3 cursor-pointer" 
-              onClick={() => { setCurrentTab('home'); setMobileMenuOpen(false); }}
+              onClick={() => { navigateToTab('home'); setMobileMenuOpen(false); }}
             >
               <div className="w-10 h-10 rounded-lg bg-[#0038a8] flex items-center justify-center text-white font-black text-xl tracking-tighter">
                 SL
@@ -483,31 +518,31 @@ export default function App() {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-7">
               <button 
-                onClick={() => setCurrentTab('home')}
+                onClick={() => navigateToTab('home')}
                 className={`text-sm font-semibold transition-colors ${currentTab === 'home' ? 'text-[#0038a8]' : 'text-slate-600 hover:text-slate-900'}`}
               >
                 Home
               </button>
               <button 
-                onClick={() => setCurrentTab('activities')}
+                onClick={() => navigateToTab('activities')}
                 className={`text-sm font-semibold transition-colors ${currentTab === 'activities' ? 'text-[#0038a8]' : 'text-slate-600 hover:text-slate-900'}`}
               >
                 Calendar of Activities
               </button>
               <button 
-                onClick={() => setCurrentTab('gallery')}
+                onClick={() => navigateToTab('gallery')}
                 className={`text-sm font-semibold transition-colors ${currentTab === 'gallery' ? 'text-[#0038a8]' : 'text-slate-600 hover:text-slate-900'}`}
               >
                 Gallery
               </button>
               <button 
-                onClick={() => setCurrentTab('contact')}
+                onClick={() => navigateToTab('contact')}
                 className={`text-sm font-semibold transition-colors ${currentTab === 'contact' ? 'text-[#0038a8]' : 'text-slate-600 hover:text-slate-900'}`}
               >
                 Contact
               </button>
               <button 
-                onClick={() => setCurrentTab('register')}
+                onClick={() => navigateToTab('register')}
                 className="blue-glow-btn text-white px-5 py-2.5 rounded-full text-sm font-semibold inline-flex items-center gap-2 cursor-pointer"
               >
                 Register for Homecoming
@@ -532,33 +567,33 @@ export default function App() {
         {mobileMenuOpen && (
           <div className="md:hidden bg-white/95 border-b border-slate-100 flex flex-col px-4 pt-3 pb-6 gap-3 animate-fadeIn">
             <button 
-              onClick={() => { setCurrentTab('home'); setMobileMenuOpen(false); }}
+              onClick={() => { navigateToTab('home'); setMobileMenuOpen(false); }}
               className={`text-left px-3 py-2.5 rounded-lg text-base font-semibold ${currentTab === 'home' ? 'bg-[#0038a8]/5 text-[#0038a8]' : 'text-slate-700'}`}
             >
               Home
             </button>
             <button 
-              onClick={() => { setCurrentTab('activities'); setMobileMenuOpen(false); }}
+              onClick={() => { navigateToTab('activities'); setMobileMenuOpen(false); }}
               className={`text-left px-3 py-2.5 rounded-lg text-base font-semibold ${currentTab === 'activities' ? 'bg-[#0038a8]/5 text-[#0038a8]' : 'text-slate-700'}`}
             >
               Calendar of Activities
             </button>
             <button 
-              onClick={() => { setCurrentTab('gallery'); setMobileMenuOpen(false); }}
+              onClick={() => { navigateToTab('gallery'); setMobileMenuOpen(false); }}
               className={`text-left px-3 py-2.5 rounded-lg text-base font-semibold ${currentTab === 'gallery' ? 'bg-[#0038a8]/5 text-[#0038a8]' : 'text-slate-700'}`}
             >
               Gallery
             </button>
             <button 
-              onClick={() => { setCurrentTab('contact'); setMobileMenuOpen(false); }}
+              onClick={() => { navigateToTab('contact'); setMobileMenuOpen(false); }}
               className={`text-left px-3 py-2.5 rounded-lg text-base font-semibold ${currentTab === 'contact' ? 'bg-[#0038a8]/5 text-[#0038a8]' : 'text-slate-700'}`}
             >
               Contact
             </button>
             <div className="h-px bg-slate-100 my-1"></div>
             <button 
-              onClick={() => { setCurrentTab('register'); setMobileMenuOpen(false); }}
-              className="w-full bg-[#0038a8] text-white text-center py-3 rounded-xl font-bold block"
+              onClick={() => { navigateToTab('register'); setMobileMenuOpen(false); }}
+              className="w-full bg-[#0038a8] text-white text-center py-3 rounded-full font-bold block"
             >
               Register for Homecoming
             </button>
@@ -603,14 +638,14 @@ export default function App() {
                     {/* Action buttons */}
                     <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4 pt-2">
                       <button 
-                        onClick={() => setCurrentTab('register')}
+                        onClick={() => navigateToTab('register')}
                         className="blue-glow-btn text-white px-7 py-3 rounded-full font-bold text-base inline-flex items-center gap-2 cursor-pointer"
                       >
                         Register for Homecoming
                         <ArrowRight className="w-5 h-5" />
                       </button>
                       <button 
-                        onClick={() => setCurrentTab('activities')}
+                        onClick={() => navigateToTab('activities')}
                         className="bg-white border border-slate-200 hover:border-slate-300 text-slate-700 px-7 py-3 rounded-full font-bold text-base transition-all"
                       >
                         View Activities
@@ -716,7 +751,7 @@ export default function App() {
                     <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight font-display">Pre-Homecoming & Homecoming Schedule</h2>
                   </div>
                   <button 
-                    onClick={() => setCurrentTab('activities')}
+                    onClick={() => navigateToTab('activities')}
                     className="mt-4 md:mt-0 text-[#0038a8] hover:text-[#002e8c] font-bold text-sm inline-flex items-center gap-1.5"
                   >
                     View All Details
@@ -761,8 +796,8 @@ export default function App() {
                         <div className="border-t border-slate-100 pt-4 flex items-center justify-between">
                           <span className="text-xs font-semibold text-slate-500">Learn more info</span>
                           <button
-                            onClick={() => setCurrentTab('activities')}
-                            className="p-1 px-3 text-xs bg-slate-100 hover:bg-[#0038a8] hover:text-white rounded-lg font-bold transition-all text-slate-700"
+                            onClick={() => navigateToTab('activities')}
+                            className="p-1 px-3 text-xs bg-slate-100 hover:bg-[#0038a8] hover:text-white rounded-full font-bold transition-all text-slate-700"
                           >
                             View
                           </button>
@@ -806,8 +841,8 @@ export default function App() {
                       </p>
                       <div className="pt-2">
                         <button 
-                          onClick={() => setCurrentTab('activities')}
-                          className="px-6 py-2.5 bg-[#0038a8] text-white hover:bg-[#002e8c] rounded-lg text-sm font-bold transition-colors"
+                          onClick={() => navigateToTab('activities')}
+                          className="px-6 py-2.5 bg-[#0038a8] text-white hover:bg-[#002e8c] rounded-full text-sm font-bold transition-colors"
                         >
                           Learn Tournament Details
                         </button>
@@ -833,8 +868,8 @@ export default function App() {
                       </p>
                       <div className="pt-2">
                         <button 
-                          onClick={() => setCurrentTab('activities')}
-                          className="px-6 py-2.5 bg-[#0038a8] text-white hover:bg-[#002e8c] rounded-lg text-sm font-bold transition-colors"
+                          onClick={() => navigateToTab('activities')}
+                          className="px-6 py-2.5 bg-[#0038a8] text-white hover:bg-[#002e8c] rounded-full text-sm font-bold transition-colors"
                         >
                           View Line-Ups & Tickets
                         </button>
@@ -953,7 +988,7 @@ export default function App() {
                         <div className="flex flex-wrap gap-2.5 pt-2">
                           {act.id === 'homecoming' ? (
                             <button 
-                              onClick={() => setCurrentTab('register')}
+                              onClick={() => navigateToTab('register')}
                               className="px-4 py-2 bg-[#0038a8] hover:bg-[#002e8c] text-white rounded-full text-xs font-bold inline-flex items-center gap-1.5"
                             >
                               Register Online
@@ -968,7 +1003,7 @@ export default function App() {
                             </button>
                           )}
                           <button
-                            onClick={() => setCurrentTab('contact')}
+                            onClick={() => navigateToTab('contact')}
                             className="px-4 py-2 border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-800 rounded-full text-xs font-bold inline-flex items-center gap-1.5"
                           >
                             Contact Committee
@@ -1162,13 +1197,13 @@ export default function App() {
                   <div className="pt-4 flex flex-col sm:flex-row justify-center items-center gap-3">
                     <button 
                       onClick={() => { setJustRegistered(false); setFinalRefId(''); }}
-                      className="px-6 py-3 border border-slate-200 hover:border-slate-300 text-slate-700 font-bold rounded-xl text-sm"
+                      className="px-6 py-3 border border-slate-200 hover:border-slate-300 text-slate-700 font-bold rounded-full text-sm"
                     >
                       New Submission
                     </button>
                     <button 
-                      onClick={() => setCurrentTab('home')}
-                      className="px-6 py-3 bg-[#0038a8] hover:bg-[#002e8c] text-white font-bold rounded-xl text-sm shadow-md"
+                      onClick={() => navigateToTab('home')}
+                      className="px-6 py-3 bg-[#0038a8] hover:bg-[#002e8c] text-white font-bold rounded-full text-sm shadow-md"
                     >
                       Back to Homepage
                     </button>
@@ -2055,11 +2090,11 @@ export default function App() {
             <div className="space-y-3">
               <span className="font-extrabold text-sm text-white uppercase block">Explore</span>
               <ul className="text-xs space-y-2">
-                <li><button onClick={() => setCurrentTab('home')} className="hover:text-white transition-colors">Home Landing</button></li>
-                <li><button onClick={() => setCurrentTab('activities')} className="hover:text-white transition-colors">Calendar of Activities</button></li>
-                <li><button onClick={() => setCurrentTab('gallery')} className="hover:text-white transition-colors">Visual Archives Gallery</button></li>
-                <li><button onClick={() => setCurrentTab('contact')} className="hover:text-white transition-colors">Contact Committee</button></li>
-                <li><button onClick={() => { setCurrentTab('register'); window.location.hash = '#register'; }} className="hover:text-white transition-colors font-bold text-[#00ea8c]">RSVP Registration Page</button></li>
+                <li><button onClick={() => navigateToTab('home')} className="hover:text-white transition-colors">Home Landing</button></li>
+                <li><button onClick={() => navigateToTab('activities')} className="hover:text-white transition-colors">Calendar of Activities</button></li>
+                <li><button onClick={() => navigateToTab('gallery')} className="hover:text-white transition-colors">Visual Archives Gallery</button></li>
+                <li><button onClick={() => navigateToTab('contact')} className="hover:text-white transition-colors">Contact Committee</button></li>
+                <li><button onClick={() => navigateToTab('register')} className="hover:text-white transition-colors font-bold text-[#00ea8c]">RSVP Registration Page</button></li>
               </ul>
             </div>
 
