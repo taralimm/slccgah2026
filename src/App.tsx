@@ -103,7 +103,11 @@ export default function App() {
   const getTabFromPath = () => {
     if (typeof window === 'undefined') return 'home';
     const path = window.location.pathname.replace(/^\/|\/$/g, '').toLowerCase();
-    if (['activities', 'gallery', 'contact', 'register', 'admin'].includes(path)) {
+    if (path === 'register') {
+      window.location.href = 'https://form.jotform.com/260768214727059';
+      return 'home';
+    }
+    if (['activities', 'gallery', 'contact', 'admin'].includes(path)) {
       return path as any;
     }
     return 'home';
@@ -112,6 +116,10 @@ export default function App() {
   const [currentTab, setCurrentTab] = useState<'home' | 'activities' | 'gallery' | 'contact' | 'register' | 'admin'>(getTabFromPath());
 
   const navigateToTab = (tab: 'home' | 'activities' | 'gallery' | 'contact' | 'register' | 'admin') => {
+    if (tab === 'register') {
+      window.open('https://form.jotform.com/260768214727059', '_blank', 'noopener,noreferrer');
+      return;
+    }
     setCurrentTab(tab);
     const newPath = tab === 'home' ? '/' : `/${tab}`;
     if (window.location.pathname !== newPath) {
@@ -234,14 +242,22 @@ export default function App() {
     const handleUrlSync = () => {
       // Check pathname first
       const path = window.location.pathname.replace(/^\/|\/$/g, '').toLowerCase();
-      if (['activities', 'gallery', 'contact', 'register', 'admin'].includes(path)) {
+      if (path === 'register') {
+        window.location.href = 'https://form.jotform.com/260768214727059';
+        return;
+      }
+      if (['activities', 'gallery', 'contact', 'admin'].includes(path)) {
         setCurrentTab(path as any);
         return;
       }
       
       // Check hash as fallback
       const hash = window.location.hash.replace('#', '').toLowerCase();
-      if (['activities', 'gallery', 'contact', 'register', 'admin'].includes(hash)) {
+      if (hash === 'register') {
+        window.location.href = 'https://form.jotform.com/260768214727059';
+        return;
+      }
+      if (['activities', 'gallery', 'contact', 'admin'].includes(hash)) {
         setCurrentTab(hash as any);
       } else {
         setCurrentTab('home');
@@ -541,13 +557,15 @@ export default function App() {
               >
                 Contact
               </button>
-              <button 
-                onClick={() => navigateToTab('register')}
+              <a 
+                href="https://form.jotform.com/260768214727059"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="blue-glow-btn text-white px-5 py-2.5 rounded-full text-sm font-semibold inline-flex items-center gap-2 cursor-pointer"
               >
                 Register for Homecoming
                 <ChevronRight className="w-4 h-4" />
-              </button>
+              </a>
             </nav>
 
             {/* Mobile menu selector */}
@@ -591,12 +609,15 @@ export default function App() {
               Contact
             </button>
             <div className="h-px bg-slate-100 my-1"></div>
-            <button 
-              onClick={() => { navigateToTab('register'); setMobileMenuOpen(false); }}
+            <a 
+              href="https://form.jotform.com/260768214727059"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileMenuOpen(false)}
               className="w-full bg-[#0038a8] text-white text-center py-3 rounded-full font-bold block"
             >
               Register for Homecoming
-            </button>
+            </a>
           </div>
         )}
       </header>
@@ -637,13 +658,15 @@ export default function App() {
 
                     {/* Action buttons */}
                     <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4 pt-2">
-                      <button 
-                        onClick={() => navigateToTab('register')}
+                      <a 
+                        href="https://form.jotform.com/260768214727059"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="blue-glow-btn text-white px-7 py-3 rounded-full font-bold text-base inline-flex items-center gap-2 cursor-pointer"
                       >
                         Register for Homecoming
                         <ArrowRight className="w-5 h-5" />
-                      </button>
+                      </a>
                       <button 
                         onClick={() => navigateToTab('activities')}
                         className="bg-white border border-slate-200 hover:border-slate-300 text-slate-700 px-7 py-3 rounded-full font-bold text-base transition-all"
@@ -987,13 +1010,15 @@ export default function App() {
                         {/* Direct action targets */}
                         <div className="flex flex-wrap gap-2.5 pt-2">
                           {act.id === 'homecoming' ? (
-                            <button 
-                              onClick={() => navigateToTab('register')}
+                            <a 
+                              href="https://form.jotform.com/260768214727059"
+                              target="_blank"
+                              rel="noopener noreferrer"
                               className="px-4 py-2 bg-[#0038a8] hover:bg-[#002e8c] text-white rounded-full text-xs font-bold inline-flex items-center gap-1.5"
                             >
                               Register Online
                               <ChevronRight className="w-3.5 h-3.5" />
-                            </button>
+                            </a>
                           ) : (
                             <button
                               onClick={() => triggerToast(`Contact committee organizers regarding specific details of ${act.title}.`, "info")}
@@ -2094,7 +2119,7 @@ export default function App() {
                 <li><button onClick={() => navigateToTab('activities')} className="hover:text-white transition-colors">Calendar of Activities</button></li>
                 <li><button onClick={() => navigateToTab('gallery')} className="hover:text-white transition-colors">Visual Archives Gallery</button></li>
                 <li><button onClick={() => navigateToTab('contact')} className="hover:text-white transition-colors">Contact Committee</button></li>
-                <li><button onClick={() => navigateToTab('register')} className="hover:text-white transition-colors font-bold text-[#00ea8c]">RSVP Registration Page</button></li>
+                <li><a href="https://form.jotform.com/260768214727059" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors font-bold text-[#00ea8c]">RSVP Registration Page</a></li>
               </ul>
             </div>
 
