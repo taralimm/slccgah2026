@@ -88,7 +88,7 @@ export default function Home({ countdown, navigateToTab }: HomeProps) {
               <div className="bg-white p-3 rounded-2xl shadow-xl border border-slate-100 w-full max-w-sm flex flex-col gap-3">
                 <div className="rounded-xl overflow-hidden bg-slate-100 relative aspect-[4/3] flex items-center justify-center">
                   <img 
-                    src="/src/assets/images/slcc_gah_promo_1779790415288.png" 
+                    src="/registration-hero.jpg" 
                     alt="SLCC Alumni Homecoming Poster" 
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover"
