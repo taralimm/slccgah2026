@@ -173,6 +173,27 @@ export default function Home({ countdown, navigateToTab }: HomeProps) {
                     src={act.image} 
                     alt={act.title} 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      const currentSrc = target.src || '';
+                      const fallbacks = [
+                        "/SLCC Pickleball event banner.jpg",
+                        "/SLCC_Pickleball_event_banner.jpg",
+                        "/slcc_pickleball_event_banner.jpg",
+                        "/src/assets/images/SLCC Pickleball event banner.jpg",
+                        "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80"
+                      ];
+                      
+                      if (currentSrc.toLowerCase().includes('pickleball')) {
+                        let nextIndex = 0;
+                        if (currentSrc.includes('SLCC_Pickleball')) nextIndex = 2;
+                        else if (currentSrc.includes('slcc_pickleball')) nextIndex = 3;
+                        else if (currentSrc.includes('/src/assets/images/')) nextIndex = 4;
+                        else nextIndex = 1;
+                        
+                        target.src = fallbacks[nextIndex];
+                      }
+                    }}
                   />
                   <div className="absolute top-4 left-4 bg-white/95 px-3 py-1.5 rounded-lg text-xs font-bold shadow-md text-slate-800">
                     {act.date}
@@ -234,6 +255,25 @@ export default function Home({ countdown, navigateToTab }: HomeProps) {
                   src="/SLCC Pickleball event banner.jpg" 
                   alt="Pickleball Tournament Poster" 
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    const currentSrc = target.src || '';
+                    const fallbacks = [
+                      "/SLCC Pickleball event banner.jpg",
+                      "/SLCC_Pickleball_event_banner.jpg",
+                      "/slcc_pickleball_event_banner.jpg",
+                      "/src/assets/images/SLCC Pickleball event banner.jpg",
+                      "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80"
+                    ];
+                    
+                    let nextIndex = 0;
+                    if (currentSrc.includes('SLCC_Pickleball')) nextIndex = 2;
+                    else if (currentSrc.includes('slcc_pickleball')) nextIndex = 3;
+                    else if (currentSrc.includes('/src/assets/images/')) nextIndex = 4;
+                    else nextIndex = 1;
+                    
+                    target.src = fallbacks[nextIndex];
+                  }}
                 />
               </div>
               <div className="w-full lg:w-1/2 space-y-4">
