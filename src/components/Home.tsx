@@ -231,7 +231,7 @@ export default function Home({ countdown, navigateToTab }: HomeProps) {
             <div className="flex flex-col lg:flex-row gap-8 items-center bg-slate-50 p-6 sm:p-8 rounded-2xl border border-slate-100">
               <div className="w-full lg:w-1/2 rounded-xl overflow-hidden aspect-[16/10] bg-slate-200">
                 <img 
-                  src="/src/assets/images/SLCC%20Pickleball%20event%20banner.jpg" 
+                  src="/src/assets/images/SLCC Pickleball event banner.jpg" 
                   alt="Pickleball Tournament Poster" 
                   className="w-full h-full object-cover"
                 />
