@@ -29,79 +29,24 @@ import {
 } from 'lucide-react';
 import { Registration, PaymentStatus, EmailLog, SystemStatus } from './types.js';
 
-// Pre-Homecoming Activities Data
-const ACTIVITIES_DATA = [
-  {
-    id: 'pickleball',
-    title: "1st Louisian Pickleball Tournament",
-    date: "June 20 & 21, 2026 | 8:00 AM",
-    category: "Fundraising Activity",
-    description: "Match up and smash at the court! In cooperation with SLSM Batch 01 - Alumni. Our pioneer pickleball gathering seeks to build camaraderie among alumni while raising funds for Homecoming.",
-    details: "Reg Fee: ₱800. Free commemorative jersey if registered before May 31, 2026. Executive Level: Mens/Mixed/Womens Low (Prize: 5k, 3k, 2k). Invitational Level: Mixed Low & Mens Low (Prize: 5k, 3k, 2k), Mens Intermediate (Prize: 8k, 5k, 3k). Location: Saint Louis College of Cebu Gymnasium. Contact: REX 0992 734 0142. Powered by BAX, XP, PROTECH XP.",
-    image: "public/SLCC Pickleball event banner.jpg"
-  },
-  {
-    id: 'musicfest',
-    title: "Louisian Music Fest",
-    date: "June 27, 2026",
-    category: "Fundraising Activity",
-    description: "An open-air evening acoustic event featuring local nostalgic acoustic bands singing 90s alternative rock hits and pop classics.",
-    details: "More Details Coming Soon",
-    image: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: 'treeplanting',
-    title: "Tree Planting Activity",
-    date: "July 11, 2026",
-    category: "Community Outreach Activity",
-    description: "Bridging alumni and environmental protection. Help us seed mangrove saplings and foster clean future coastlines for Saint Louis College-Cebu's future.",
-    details: "More Details Coming Soon",
-    image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: 'medical',
-    title: "Medical & Dental Mission with Legal Services",
-    date: "July 18, 2026",
-    category: "Community Outreach Activity",
-    description: "A comprehensive civic compassion service providing free basic health consults, dental checkups, essential medicines, and gratis legal counsel to neighbors.",
-    details: "More Details Coming Soon",
-    image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: 'feeding',
-    title: "Feeding Program",
-    date: "July 25, 2026",
-    category: "Community Outreach Activity",
-    description: "Spreading joy and proper nutrition to children in local community areas of consolacion and adjacent cities in Cebu.",
-    details: "More Details Coming Soon",
-    image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: 'homecoming',
-    title: "SLCC Grand Alumni Homecoming 2026",
-    date: "August 1, 2026",
-    category: "Main Event",
-    description: "The main arena night: '90's Throwback Reunion'. Get ready to throw it back to the dopest decade with retro photo zones, karaoke, trivia, and food panels.",
-    details: "More Details Coming Soon",
-    image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80"
-  }
-];
-
-// Gallery Images Data
-const GALLERY_DATA = [] as Array<{ id: number; album: string; url: string; title: string; desc: string }>;
-
-// Sponsors List
-const SPONSORS_DATA = [
-  { name: 'Partner Placeholder 1', logo: '' },
-  { name: 'Partner Placeholder 2', logo: '' },
-  { name: 'Sponsor Placeholder 1', logo: '' },
-  { name: 'Sponsor Placeholder 2', logo: '' }
-];
+// Import newly separated pages
+import Home from './components/Home.js';
+import Activities from './components/Activities.js';
+import Gallery from './components/Gallery.js';
+import Contact from './components/Contact.js';
 
 export default function App() {
-  // Helper to get tab from pathname
-  const getTabFromPath = () => {
+  // Helper to get tab from pathname or hash on load
+  const getInitialTab = () => {
     if (typeof window === 'undefined') return 'home';
+    
+    // Check hash first
+    const hash = window.location.hash.replace(/^#\//, '').replace(/^#/, '').toLowerCase();
+    if (['activities', 'gallery', 'contact', 'admin'].includes(hash)) {
+      return hash as any;
+    }
+
+    // fallback to pathname
     const path = window.location.pathname.replace(/^\/|\/$/g, '').toLowerCase();
     if (path === 'register') {
       window.location.href = 'https://form.jotform.com/260768214727059';
@@ -113,7 +58,7 @@ export default function App() {
     return 'home';
   };
 
-  const [currentTab, setCurrentTab] = useState<'home' | 'activities' | 'gallery' | 'contact' | 'register' | 'admin'>(getTabFromPath());
+  const [currentTab, setCurrentTab] = useState<'home' | 'activities' | 'gallery' | 'contact' | 'register' | 'admin'>(getInitialTab());
 
   const navigateToTab = (tab: 'home' | 'activities' | 'gallery' | 'contact' | 'register' | 'admin') => {
     if (tab === 'register') {
@@ -121,10 +66,8 @@ export default function App() {
       return;
     }
     setCurrentTab(tab);
-    const newPath = tab === 'home' ? '/' : `/${tab}`;
-    if (window.location.pathname !== newPath) {
-      window.history.pushState({ tab }, '', newPath);
-    }
+    const newHash = tab === 'home' ? '#/' : `#/${tab}`;
+    window.location.hash = newHash;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -134,13 +77,7 @@ export default function App() {
   // Custom toast notifications to avoid window.alert
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
 
-  // Gallery view lightbox states
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const [galleryFilter, setGalleryFilter] = useState<string>('all');
 
-  // Contact page states
-  const [contactForm, setContactForm] = useState({ name: '', email: '', subject: '', message: '' });
-  const [contactSubmitting, setContactSubmitting] = useState(false);
 
   // Registration Page form states
   const [regForm, setRegForm] = useState({
@@ -247,12 +184,14 @@ export default function App() {
         return;
       }
       if (['activities', 'gallery', 'contact', 'admin'].includes(path)) {
+        // Transparent pathname-to-hash redirect to prevent 404s!
+        window.history.replaceState(null, '', `/#/${path}`);
         setCurrentTab(path as any);
         return;
       }
       
       // Check hash as fallback
-      const hash = window.location.hash.replace('#', '').toLowerCase();
+      const hash = window.location.hash.replace(/^#\//, '').replace(/^#/, '').toLowerCase();
       if (hash === 'register') {
         window.location.href = 'https://form.jotform.com/260768214727059';
         return;
@@ -480,10 +419,7 @@ export default function App() {
     setAdminNotesText(prev => ({ ...prev, [id]: text }));
   };
 
-  // Filtered gallery view list
-  const filteredGallery = galleryFilter === 'all' 
-    ? GALLERY_DATA 
-    : GALLERY_DATA.filter(p => p.album === galleryFilter);
+
 
   // Years helper from 2026 to 1920 for registration lists
   const batchYears: string[] = [];
@@ -627,564 +563,19 @@ export default function App() {
         
         {/* ================= HOME TAB VIEW CONTENT ================= */}
         {currentTab === 'home' && (
-          <div>
-            
-            {/* HER0 AREA WITH RETRO TEXT AND countdown */}
-            <section className="relative gradient-bg-hero grid-overlay overflow-hidden py-16 sm:py-24 lg:py-28">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div className="lg:grid lg:grid-cols-12 lg:gap-8 items-center">
-                  
-                  {/* Left Column Intro Text */}
-                  <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-                    
-                    {/* Retro Blue Badge */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0038a8]/10 text-[#0038a8] font-bold text-xs uppercase tracking-wider">
-                      <Clock className="w-3.5 h-3.5" />
-                      Countdown to the Grand Reunion 📣
-                    </div>
-                    
-                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-none">
-                      Saint Louis College-Cebu <br />
-                      <span className="gradient-text-blue font-display">Grand Alumni Homecoming</span> 2026
-                    </h1>
-
-                    <p className="text-2xl font-black text-[#0038a8] tracking-tight">
-                      Theme: 90's Throwback Reunion 🕺💿
-                    </p>
-
-                    <p className="text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-medium">
-                      Reconnect. Celebrate. Party Like It's 1999. From mixtapes to arcade games, we're turning back the clock for one epic night of nostalgic fun and lasting SLCC pride.
-                    </p>
-
-                    {/* Action buttons */}
-                    <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4 pt-2">
-                      <a 
-                        href="https://form.jotform.com/260768214727059"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="blue-glow-btn text-white px-7 py-3 rounded-full font-bold text-base inline-flex items-center gap-2 cursor-pointer"
-                      >
-                        Register for Homecoming
-                        <ArrowRight className="w-5 h-5" />
-                      </a>
-                      <button 
-                        onClick={() => navigateToTab('activities')}
-                        className="bg-white border border-slate-200 hover:border-slate-300 text-slate-700 px-7 py-3 rounded-full font-bold text-base transition-all"
-                      >
-                        View Activities
-                      </button>
-                    </div>
-
-                    {/* Counting metrics timer box */}
-                    <div className="pt-6">
-                      <p className="text-xs text-slate-500 font-bold uppercase tracking-widest text-center lg:text-left mb-2">
-                        SAVE THE DATE: AUGUST 1, 2026 (SATURDAY)
-                      </p>
-                      <div className="flex justify-center lg:justify-start gap-3">
-                        <div className="bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-100 text-center min-w-[70px]">
-                          <span className="font-extrabold text-[#0038a8] text-2xl sm:text-3xl block">{countdown.days}</span>
-                          <span className="text-[10px] text-slate-500 font-bold uppercase">Days</span>
-                        </div>
-                        <div className="bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-100 text-center min-w-[70px]">
-                          <span className="font-extrabold text-[#0038a8] text-2xl sm:text-3xl block">{countdown.hours}</span>
-                          <span className="text-[10px] text-slate-500 font-bold uppercase">Hours</span>
-                        </div>
-                        <div className="bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-100 text-center min-w-[70px]">
-                          <span className="font-extrabold text-[#0038a8] text-2xl sm:text-3xl block">{countdown.minutes}</span>
-                          <span className="text-[10px] text-slate-500 font-bold uppercase">Mins</span>
-                        </div>
-                        <div className="bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-100 text-center min-w-[70px]">
-                          <span className="font-extrabold text-[#0038a8] text-2xl sm:text-3xl block">{countdown.seconds}</span>
-                          <span className="text-[10px] text-slate-500 font-bold uppercase">Secs</span>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  {/* Right Column Featured Promo Image Card */}
-                  <div className="lg:col-span-5 mt-12 lg:mt-0 relative flex justify-center">
-                    <div className="bg-white p-3 rounded-2xl shadow-xl border border-slate-100 w-full max-w-sm flex flex-col gap-3">
-                      <div className="rounded-xl overflow-hidden bg-slate-100 relative aspect-[4/3] flex items-center justify-center">
-                        <img 
-                          src="/src/assets/images/slcc_gah_promo_1779790415288.png" 
-                          alt="SLCC Alumni Homecoming Poster" 
-                          referrerPolicy="no-referrer"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="p-1.5 space-y-1">
-                        <span className="text-xs font-bold text-[#0038a8] uppercase">90's BASH OFFICIAL POSTER</span>
-                        <h4 className="font-bold text-slate-900 leading-snug">Get ready to rewind time and relive the ultimate 90's vibe! 🎧✨</h4>
-                        <p className="text-xs text-slate-500">Reconnect with old friends and relive the good times. Save your seats early!</p>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </section>
-
-            {/* WELCOME INFORMATIVE SECTION */}
-            <section className="py-20 bg-white">
-              <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-8">
-                <div className="w-16 h-16 bg-[#0038a8]/5 rounded-full flex items-center justify-center mx-auto">
-                  <BookOpen className="w-8 h-8 text-[#0038a8]" />
-                </div>
-                <div className="space-y-3">
-                  <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">
-                    Welcome Home, Louisian Alumni!
-                  </h2>
-                  <div className="w-16 h-1 bg-[#0038a8] mx-auto rounded-full"></div>
-                </div>
-                <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-                  From class hallways to professional milestones, we're returning to our roots. Our 2026 Grand Alumni Homecoming is a grand reunion celebration of spirit, memories, and shared success. This calendar highlights activities designed to trigger retro joy, foster environmental health, and deliver free support services to the community. Join us in making this homecoming genuinely legendary.
-                </p>
-                
-                {/* Visual grid stats preview */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6">
-                  <div className="p-5 bg-slate-50 rounded-xl rounded-b-lg border-b-2 border-b-[#0038a8]">
-                    <span className="text-3xl font-bold text-slate-900 block font-display">6</span>
-                    <span className="text-xs text-slate-500 font-bold uppercase tracking-wide">Activities</span>
-                  </div>
-                  <div className="p-5 bg-slate-50 rounded-xl rounded-b-lg border-b-2 border-b-[#0038a8]">
-                    <span className="text-3xl font-bold text-slate-900 block font-display">2</span>
-                    <span className="text-xs text-slate-500 font-bold uppercase tracking-wide">Fundraisers</span>
-                  </div>
-                  <div className="p-5 bg-slate-50 rounded-xl rounded-b-lg border-b-2 border-b-[#0038a8]">
-                    <span className="text-3xl font-bold text-slate-900 block font-display">3</span>
-                    <span className="text-xs text-slate-500 font-bold uppercase tracking-wide">Outreaches</span>
-                  </div>
-                  <div className="p-5 bg-slate-50 rounded-xl rounded-b-lg border-b-2 border-b-[#0038a8]">
-                    <span className="text-3xl font-bold text-slate-900 block font-display">August 1</span>
-                    <span className="text-xs text-slate-500 font-bold uppercase tracking-wide">The Grand Event</span>
-                  </div>
-                </div>
-
-              </div>
-            </section>
-
-            {/* PRE-HOMECOMING CHRONOLOGICAL ACTIVITIES PANEL */}
-            <section className="py-20 bg-slate-50 grid-overlay">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-                  <div>
-                    <span className="text-[#0038a8] text-sm font-bold uppercase tracking-wider block mb-1">CHRONOLOGICAL PROGRAM</span>
-                    <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight font-display">Pre-Homecoming & Homecoming Schedule</h2>
-                  </div>
-                  <button 
-                    onClick={() => navigateToTab('activities')}
-                    className="mt-4 md:mt-0 text-[#0038a8] hover:text-[#002e8c] font-bold text-sm inline-flex items-center gap-1.5"
-                  >
-                    View All Details
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </div>
-
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {ACTIVITIES_DATA.map((act) => (
-                    <div key={act.id} className="glass-card rounded-2xl overflow-hidden glass-card-hover flex flex-col h-full bg-white">
-                      
-                      {/* Event Banner */}
-                      <div className="h-48 overflow-hidden bg-slate-100 relative group">
-                        <img 
-                          src={act.image} 
-                          alt={act.title} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute top-4 left-4 bg-white/95 px-3 py-1.5 rounded-lg text-xs font-bold shadow-md text-slate-800">
-                          {act.date}
-                        </div>
-                      </div>
-
-                      {/* Info body */}
-                      <div className="p-6 flex-grow flex flex-col justify-between space-y-4">
-                        <div className="space-y-2">
-                          <span className={`inline-block px-2.5 py-1 rounded text-[10px] font-bold uppercase ${
-                            act.category === 'Main Event' ? 'bg-[#0038a8]/10 text-[#0038a8]' : 
-                            act.category === 'Fundraising Activity' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' :
-                            'bg-indigo-50 text-indigo-700 border border-indigo-100'
-                          }`}>
-                            {act.category}
-                          </span>
-                          <h4 className="text-lg font-bold text-slate-900 group-hover:text-[#0038a8] transition-colors leading-snug">
-                            {act.title}
-                          </h4>
-                          <p className="text-slate-600 text-sm line-clamp-3 leading-relaxed">
-                            {act.description}
-                          </p>
-                        </div>
-
-                        <div className="border-t border-slate-100 pt-4 flex items-center justify-between">
-                          <span className="text-xs font-semibold text-slate-500">Learn more info</span>
-                          <button
-                            onClick={() => navigateToTab('activities')}
-                            className="p-1 px-3 text-xs bg-slate-100 hover:bg-[#0038a8] hover:text-white rounded-full font-bold transition-all text-slate-700"
-                          >
-                            View
-                          </button>
-                        </div>
-                      </div>
-
-                    </div>
-                  ))}
-                </div>
-
-              </div>
-            </section>
-
-            {/* FEATURED FUNDRAISING SECTION */}
-            <section className="py-20 bg-white">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
-                  <span className="text-sm font-bold text-[#0038a8] uppercase">MAKE AN IMPACT 🏅</span>
-                  <h2 className="text-3xl font-extrabold text-slate-900">Featured Fundraising Initiatives</h2>
-                  <p className="text-slate-600">Proceeds and funding goals from these events go directly toward rebuilding facilities and supporting non-profit community drives aligned with SLCC.</p>
-                </div>
-
-                <div className="space-y-12">
-                  
-                  {/* Fundraising 1: Pickleball */}
-                  <div className="flex flex-col lg:flex-row gap-8 items-center bg-slate-50 p-6 sm:p-8 rounded-2xl border border-slate-100">
-                    <div className="w-full lg:w-1/2 rounded-xl overflow-hidden aspect-[16/10] bg-slate-200">
-                      <img 
-                        src="/src/assets/images/SLCC%20Pickleball%20event%20banner.jpg" 
-                        alt="Pickleball Tournament Poster" 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="w-full lg:w-1/2 space-y-4">
-                      <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block">Featured fundraiser</span>
-                      <h3 className="text-2xl font-extrabold text-slate-900">1st Louisian Pickleball Tournament</h3>
-                      <p className="text-sm font-semibold text-slate-500">Date: June 20–21, 2026</p>
-                      <p className="text-slate-600 leading-relaxed text-sm">
-                        Experience the high-energy excitement of the pickleball court! Our fundraising tournament provides a recreational platform for competitive sport and community networking. All proceeds go directly to supporting primary logistics for our Grand Alumni Homecoming.
-                      </p>
-                      <div className="pt-2">
-                        <button 
-                          onClick={() => navigateToTab('activities')}
-                          className="px-6 py-2.5 bg-[#0038a8] text-white hover:bg-[#002e8c] rounded-full text-sm font-bold transition-colors"
-                        >
-                          Learn Tournament Details
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Fundraising 2: Music Fest */}
-                  <div className="flex flex-col lg:flex-row-reverse gap-8 items-center bg-slate-50 p-6 sm:p-8 rounded-2xl border border-slate-100">
-                    <div className="w-full lg:w-1/2 rounded-xl overflow-hidden aspect-[16/10] bg-slate-200">
-                      <img 
-                        src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=80" 
-                        alt="Louisian Music Fest" 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="w-full lg:w-1/2 space-y-4">
-                      <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block">Featured fundraiser</span>
-                      <h3 className="text-2xl font-extrabold text-slate-900">Louisian Music Fest</h3>
-                      <p className="text-sm font-semibold text-slate-500">Date: June 27, 2026</p>
-                      <p className="text-slate-600 leading-relaxed text-sm">
-                        Jam with fellow Louisians! Our acoustic concert series plays alternative classics, vintage pop melodies, and legendary soundtracks from the 90s decade. Features professional production, interactive request boxes, food merchandise panels, and custom-brewed refreshments.
-                      </p>
-                      <div className="pt-2">
-                        <button 
-                          onClick={() => navigateToTab('activities')}
-                          className="px-6 py-2.5 bg-[#0038a8] text-white hover:bg-[#002e8c] rounded-full text-sm font-bold transition-colors"
-                        >
-                          View Line-Ups & Tickets
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
-            </section>
-
-            {/* SPONSORS SECTION */}
-            <section className="py-20 bg-slate-50 border-t border-slate-100">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-10">
-                <span className="text-slate-400 font-extrabold text-xs uppercase tracking-widest block">Homecoming Sponsors & Community Partners</span>
-                <div className="flex flex-wrap justify-center items-center gap-12 sm:gap-16">
-                  {SPONSORS_DATA.map((spon, idx) => (
-                    <div key={idx} className="flex flex-col items-center gap-2 transition-all opacity-85 hover:opacity-100">
-                      {spon.logo ? (
-                        <img 
-                          src={spon.logo} 
-                          alt={spon.name} 
-                          className="h-10 sm:h-12 object-contain bg-transparent rounded grayscale hover:grayscale-0 transition-all"
-                        />
-                      ) : (
-                        <div className="h-12 w-36 border border-dashed border-slate-300 rounded-xl flex items-center justify-center bg-slate-100/60 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
-                          Placeholder
-                        </div>
-                      )}
-                      <span className="text-[10px] text-slate-500 font-medium">{spon.name}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-          </div>
+          <Home countdown={countdown} navigateToTab={navigateToTab} />
         )}
 
 
         {/* ================= CALENDAR OF ACTIVITIES TAB ================= */}
         {currentTab === 'activities' && (
-          <div className="py-12 sm:py-16 gradient-bg-hero grid-overlay">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6">
-              
-              <div className="text-center space-y-4 mb-14">
-                <span className="text-xs font-bold text-[#0038a8] uppercase tracking-wider block">Homecoming Progression Roadmap</span>
-                <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-display">Calendar of Activities</h1>
-                <p className="text-slate-600 max-w-xl mx-auto">Track our chronological activities and community service runs starting from June up to the homecoming bonfire bash on August 1st.</p>
-              </div>
-
-              {/* Graphical Timeline Flow */}
-              <div className="relative border-l-2 border-slate-200 ml-4 md:ml-32 space-y-14">
-                {ACTIVITIES_DATA.map((act, idx) => (
-                  <div key={act.id} className="relative group pl-8">
-                    
-                    {/* Date Tag Left Anchor */}
-                    <div className="hidden md:block absolute -left-36 top-1 text-right w-28 pr-4">
-                      <span className="font-extrabold text-[#0038a8] text-sm block">{act.date.split(',')[0]}</span>
-                      <span className="text-xs text-slate-400 font-medium">{act.date.split(',')[1] || '2026'}</span>
-                    </div>
-
-                    {/* Node Dot */}
-                    <div className="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-white border-2 border-[#0038a8] group-hover:bg-[#0038a8] transition-colors flex items-center justify-center">
-                      <div className="w-1.5 h-1.5 bg-[#0038a8] rounded-full group-hover:bg-white"></div>
-                    </div>
-
-                    {/* Timeline Content Material Card */}
-                    <div className="glass-card bg-white p-6 sm:p-8 rounded-2xl flex flex-col md:flex-row gap-6">
-                      
-                      {/* Image Preview */}
-                      <div className="w-full md:w-1/3 rounded-xl overflow-hidden aspect-[4/3] bg-slate-100 flex-shrink-0">
-                        <img 
-                          src={act.image} 
-                          alt={act.title} 
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-
-                      {/* Info Content metadata */}
-                      <div className="flex-grow space-y-4 flex flex-col justify-between">
-                        <div>
-                          
-                          {/* Top row */}
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="md:hidden text-xs font-bold text-[#0038a8]">{act.date}</span>
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                              act.category === 'Main Event' ? 'bg-[#0038a8]/10 text-[#0038a8]' : 
-                              act.category === 'Fundraising Activity' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' :
-                              'bg-indigo-50 text-indigo-700 border border-indigo-100'
-                            }`}>
-                              {act.category}
-                            </span>
-                          </div>
-
-                          <h3 className="text-2xl font-bold text-slate-900 leading-snug">
-                            {act.title}
-                          </h3>
-
-                          <p className="text-slate-600 font-medium text-sm leading-relaxed mt-2">
-                            {act.description}
-                          </p>
-
-                          <div className="bg-slate-50 p-3 rounded-lg flex items-start gap-2 border border-slate-100 text-xs mt-3">
-                            <Info className="w-4 h-4 text-[#0038a8] mt-0.5 flex-shrink-0" />
-                            <div>
-                              <p className="font-bold text-slate-800">PART_DETAILS:</p>
-                              <p className="text-slate-500">{act.details}</p>
-                            </div>
-                          </div>
-
-                        </div>
-
-                        {/* Direct action targets */}
-                        <div className="flex flex-wrap gap-2.5 pt-2">
-                          {act.id === 'homecoming' ? (
-                            <a 
-                              href="https://form.jotform.com/260768214727059"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="px-4 py-2 bg-[#0038a8] hover:bg-[#002e8c] text-white rounded-full text-xs font-bold inline-flex items-center gap-1.5"
-                            >
-                              Register Online
-                              <ChevronRight className="w-3.5 h-3.5" />
-                            </a>
-                          ) : (
-                            <button
-                              onClick={() => triggerToast(`Contact committee organizers regarding specific details of ${act.title}.`, "info")}
-                              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full text-xs font-bold"
-                            >
-                              Inquire Info
-                            </button>
-                          )}
-                          <button
-                            onClick={() => navigateToTab('contact')}
-                            className="px-4 py-2 border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-800 rounded-full text-xs font-bold inline-flex items-center gap-1.5"
-                          >
-                            Contact Committee
-                          </button>
-                        </div>
-
-                      </div>
-
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-            </div>
-          </div>
+          <Activities triggerToast={triggerToast} navigateToTab={navigateToTab} />
         )}
 
 
         {/* ================= GALLERY TAB VIEW ================= */}
         {currentTab === 'gallery' && (
-          <div className="py-12 sm:py-16 bg-white min-h-screen">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              
-              <div className="text-center space-y-4 mb-12">
-                <span className="text-xs font-bold text-[#0038a8] uppercase tracking-wider block">Visual Throwbacks</span>
-                <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-display">Photo Gallery & Album Archives</h1>
-                <p className="text-slate-600 max-w-xl mx-auto">Browse historic snapshots, prep runs, and activities leading up to the Saint Louis College-Cebu homecoming night.</p>
-              </div>
-
-              {/* Gallery category filters */}
-              <div className="flex flex-wrap justify-center items-center gap-2 mb-10">
-                <button 
-                  onClick={() => setGalleryFilter('all')}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${galleryFilter === 'all' ? 'bg-[#0038a8] text-white shadow-md' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}
-                >
-                  All Albums
-                </button>
-                <button 
-                  onClick={() => setGalleryFilter('pickleball')}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${galleryFilter === 'pickleball' ? 'bg-[#0038a8] text-white shadow-md' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}
-                >
-                  Pickleball Tournament
-                </button>
-                <button 
-                  onClick={() => setGalleryFilter('musicfest')}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${galleryFilter === 'musicfest' ? 'bg-[#0038a8] text-white shadow-md' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}
-                >
-                  Louisian Music Fest
-                </button>
-                <button 
-                  onClick={() => setGalleryFilter('treeplanting')}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${galleryFilter === 'treeplanting' ? 'bg-[#0038a8] text-white shadow-md' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}
-                >
-                  Tree Planting
-                </button>
-                <button 
-                  onClick={() => setGalleryFilter('medical')}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${galleryFilter === 'medical' ? 'bg-[#0038a8] text-white shadow-md' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}
-                >
-                  Medical Mission
-                </button>
-                <button 
-                  onClick={() => setGalleryFilter('feeding')}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${galleryFilter === 'feeding' ? 'bg-[#0038a8] text-white shadow-md' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}
-                >
-                  Feeding Program
-                </button>
-                <button 
-                  onClick={() => setGalleryFilter('homecoming')}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${galleryFilter === 'homecoming' ? 'bg-[#0038a8] text-white shadow-md' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}
-                >
-                  Grand Homecoming
-                </button>
-              </div>
-
-              {/* Masonry-style Grid content with zoom states */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {filteredGallery.map((img, idx) => (
-                  <div 
-                    key={img.id}
-                    onClick={() => setLightboxIndex(idx)}
-                    className="group relative rounded-xl overflow-hidden aspect-video sm:aspect-square bg-slate-100 shadow-sm hover:shadow-lg cursor-pointer transition-all border border-slate-100"
-                  >
-                    <img 
-                      src={img.url} 
-                      alt={img.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 flex flex-col justify-end p-4 transition-opacity duration-200">
-                      <span className="text-[#00ea8c] text-[9px] font-bold uppercase tracking-wider">{img.album}</span>
-                      <h4 className="text-white text-base font-bold leading-tight mt-0.5">{img.title}</h4>
-                      <p className="text-slate-300 text-xs mt-1">{img.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Inline feedback if filter yields blank */}
-              {filteredGallery.length === 0 && (
-                <div className="p-16 text-center border-2 border-dashed border-slate-200 rounded-2xl max-w-md mx-auto my-12">
-                  <Camera className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                  <h4 className="font-bold text-slate-700">No photos in this album yet</h4>
-                  <p className="text-slate-500 text-xs mt-2">These pictures are reserved and will populate instantly during actual launch execution of homecoming activities.</p>
-                </div>
-              )}
-
-              {/* Lightbox Viewer modal overlay */}
-              {lightboxIndex !== null && (
-                <div className="fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center p-4">
-                  
-                  {/* Close button */}
-                  <button 
-                    onClick={() => setLightboxIndex(null)}
-                    className="absolute top-6 right-6 text-white hover:text-slate-300 p-2 text-sm font-bold flex items-center gap-1.5 focus:outline-none"
-                  >
-                    <X className="w-6 h-6" /> Close
-                  </button>
-
-                  <div className="max-w-4xl w-full flex flex-col justify-center items-center gap-4">
-                    
-                    <div className="relative aspect-video max-h-[70vh] bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-2xl flex items-center justify-center">
-                      <img 
-                        src={filteredGallery[lightboxIndex].url} 
-                        alt={filteredGallery[lightboxIndex].title} 
-                        className="max-h-[70vh] w-auto max-w-full object-contain"
-                      />
-                    </div>
-
-                    <div className="text-center text-slate-200 space-y-1 max-w-xl">
-                      <span className="text-[#38bdf8] text-xs font-extrabold uppercase tracking-wide">Album: {filteredGallery[lightboxIndex].album}</span>
-                      <h3 className="text-xl font-bold">{filteredGallery[lightboxIndex].title}</h3>
-                      <p className="text-slate-400 text-sm">{filteredGallery[lightboxIndex].desc}</p>
-                    </div>
-
-                    {/* Left/Right switches */}
-                    <div className="flex items-center gap-10 mt-2">
-                      <button 
-                        onClick={() => setLightboxIndex(prev => prev !== null ? (prev - 1 + filteredGallery.length) % filteredGallery.length : null)}
-                        className="text-white hover:text-slate-300 text-base font-bold flex items-center gap-1"
-                      >
-                        ← Prev
-                      </button>
-                      <button 
-                        onClick={() => setLightboxIndex(prev => prev !== null ? (prev + 1) % filteredGallery.length : null)}
-                        className="text-white hover:text-slate-300 text-base font-bold flex items-center gap-1"
-                      >
-                        Next →
-                      </button>
-                    </div>
-
-                  </div>
-                </div>
-              )}
-
-            </div>
-          </div>
+          <Gallery />
         )}
 
 
@@ -1575,81 +966,7 @@ export default function App() {
 
         {/* ================= CONTACT TAB ================= */}
         {currentTab === 'contact' && (
-          <div className="py-12 sm:py-16 bg-white min-h-screen grid-overlay">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-              
-              <div className="text-center space-y-4 mb-14">
-                <span className="text-xs font-bold text-[#0038a8] uppercase tracking-wider block">Outreach Channel</span>
-                <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-display">Contact Secretariat Committee</h1>
-                <p className="text-slate-600 max-w-xl mx-auto">Have questions about ticket distributions, batch coordination, or accommodations in Cebu? Reach out to us directly via email or our hotline numbers listed below.</p>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-8 items-stretch">
-                
-                {/* Left Column contact details card */}
-                <div className="flex flex-col justify-between glass-card bg-slate-50/50 p-6 sm:p-8 rounded-2xl border border-slate-100 shadow-sm space-y-6">
-                  <div>
-                    <h3 className="text-xl font-bold text-slate-900 border-b border-slate-200 pb-3">Secretariat Committee</h3>
-                    
-                    <div className="space-y-6 text-sm text-slate-600 mt-6">
-                      
-                      <div className="flex items-start gap-3">
-                        <MapPin className="w-5 h-5 text-[#0038a8] flex-shrink-0 mt-0.5" />
-                        <div>
-                          <p className="font-bold text-slate-800">Saint Louis College-Cebu Campus</p>
-                          <p className="text-slate-500 mt-0.5">Sudlon, Maguikay, Mandaue City, 6014 Cebu, Philippines</p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-start gap-3">
-                        <Mail className="w-5 h-5 text-[#0038a8] flex-shrink-0 mt-0.5" />
-                        <div>
-                          <p className="font-bold text-slate-800">Secretariat Email</p>
-                          <p className="text-[#0038a8] font-semibold mt-0.5">charles8mendoza@gmail.com</p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-start gap-3">
-                        <Phone className="w-5 h-5 text-[#0038a8] flex-shrink-0 mt-0.5" />
-                        <div>
-                          <p className="font-bold text-slate-800">Phone Hotline</p>
-                          <p className="text-slate-500 mt-0.5">+63 (32) 346 1259 / +63 917 336 3560</p>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div className="bg-[#0038a8]/5 border border-[#0038a8]/10 rounded-xl p-4 text-xs text-slate-600">
-                    <p className="font-semibold text-[#0038a8] mb-1">Office Hours</p>
-                    <p>Monday to Friday: 8:00 AM – 5:00 PM (PST)</p>
-                  </div>
-                </div>
-
-                {/* Right Column High Quality Map Location placeholder */}
-                <div className="rounded-2xl overflow-hidden shadow-sm min-h-[320px] bg-slate-100 relative border border-slate-100 flex flex-col justify-between">
-                  {/* Visual representation of structural map grid */}
-                  <div className="absolute inset-0 grid-overlay flex items-center justify-center opacity-75 bg-[#0038a8]/5">
-                    <div className="text-center flex flex-col items-center gap-2 p-4">
-                      <div className="w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center text-[#0038a8]">
-                        <MapPin className="w-6 h-6 animate-bounce" />
-                      </div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-700">Campus Arena Coordinates</span>
-                      <p className="text-[11px] text-slate-400 font-mono">10.3441° N, 123.9312° E</p>
-                    </div>
-                  </div>
-
-                  {/* Gradient bottom block */}
-                  <div className="mt-auto w-full p-5 bg-gradient-to-t from-white via-white/90 to-transparent z-10 text-slate-900">
-                    <h4 className="font-extrabold text-slate-800">Saint Louis College-Cebu Map</h4>
-                    <p className="text-slate-500 text-xs mt-1">Sudlon, Maguikay, Mandaue City, Central Cebu</p>
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-          </div>
+          <Contact />
         )}
 
 
