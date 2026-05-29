@@ -233,30 +233,32 @@ app.post('/api/registrations/:id/reject', async (req, res) => {
 // ------------------- VITE SETUP AND SERVER START -------------------
 
 async function start() {
-  if (process.env.NODE_ENV !== 'production') {
+  const isProductionMode = process.env.NODE_ENV === 'production' || 
+                           (typeof __filename !== 'undefined' && __filename.includes('dist')) || 
+                           !fs.existsSync(path.resolve(process.cwd(), 'server.ts'));
+
+  if (!isProductionMode) {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
     });
-    app.use(vite.middlewares);
 
-    // Fallback for sub-page URL refreshes in development mode
-    app.get('*', async (req, res, next) => {
-      // Don't intercept API routes, locally stored files, or files with suffixes (assets)
-      if (req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/uploads') || req.originalUrl.includes('.')) {
-        return next();
+    // SPA Routing Fallback Middleware before Vite middleware
+    app.use((req, res, next) => {
+      const isGet = req.method === 'GET';
+      const isApi = req.originalUrl.startsWith('/api');
+      const isUpload = req.originalUrl.startsWith('/uploads');
+      const hasDot = req.originalUrl.includes('.') || req.path.includes('.');
+      
+      if (isGet && !isApi && !isUpload && !hasDot) {
+        req.url = '/index.html';
       }
-      try {
-        const url = req.originalUrl;
-        const html = fs.readFileSync(path.resolve(process.cwd(), 'index.html'), 'utf-8');
-        const transformedHtml = await vite.transformIndexHtml(url, html);
-        res.status(200).set({ 'Content-Type': 'text/html' }).send(transformedHtml);
-      } catch (e: any) {
-        vite.ssrFixStacktrace(e);
-        next(e);
-      }
+      next();
     });
+
+    app.use(vite.middlewares);
   } else {
+    console.log('📦 Running in Production Mode');
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
