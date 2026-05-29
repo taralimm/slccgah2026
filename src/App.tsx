@@ -38,7 +38,7 @@ const ACTIVITIES_DATA = [
     category: "Fundraising Activity",
     description: "Match up and smash at the court! In cooperation with SLSM Batch 01 - Alumni. Our pioneer pickleball gathering seeks to build camaraderie among alumni while raising funds for Homecoming.",
     details: "Reg Fee: ₱800. Free commemorative jersey if registered before May 31, 2026. Executive Level: Mens/Mixed/Womens Low (Prize: 5k, 3k, 2k). Invitational Level: Mixed Low & Mens Low (Prize: 5k, 3k, 2k), Mens Intermediate (Prize: 8k, 5k, 3k). Location: Saint Louis College of Cebu Gymnasium. Contact: REX 0992 734 0142. Powered by BAX, XP, PROTECH XP.",
-    image: "/src/assets/images/SLCC%20Pickleball%20event%20banner.jpg" //
+    image: "/public/SLCC 20Pickleball 20event %20banner.jpg" //
   },
   {
     id: 'musicfest',
