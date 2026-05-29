@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
 import dotenv from 'dotenv';
 import { 
@@ -238,6 +239,23 @@ async function start() {
       appType: 'spa',
     });
     app.use(vite.middlewares);
+
+    // Fallback for sub-page URL refreshes in development mode
+    app.get('*', async (req, res, next) => {
+      // Don't intercept API routes, locally stored files, or files with suffixes (assets)
+      if (req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/uploads') || req.originalUrl.includes('.')) {
+        return next();
+      }
+      try {
+        const url = req.originalUrl;
+        const html = fs.readFileSync(path.resolve(process.cwd(), 'index.html'), 'utf-8');
+        const transformedHtml = await vite.transformIndexHtml(url, html);
+        res.status(200).set({ 'Content-Type': 'text/html' }).send(transformedHtml);
+      } catch (e: any) {
+        vite.ssrFixStacktrace(e);
+        next(e);
+      }
+    });
   } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
