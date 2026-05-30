@@ -1,5 +1,6 @@
 import { MapPin, Mail, Phone, ExternalLink, Compass } from 'lucide-react';
-import virtualTourPreview from '../assets/images/slcc-campus.png';
+
+const virtualTourPreview = '/slcc-campus.png';
 
 export default function Contact() {
   return (
