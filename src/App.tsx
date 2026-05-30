@@ -1447,7 +1447,7 @@ export default function App() {
                 Sudlon, Maguikay, Mandaue City, 6014 Cebu, Philippines
               </p>
               <p className="text-xs text-slate-300">
-                Email: charles8mendoza@gmail.com
+                Email: slsbatch2001@gmail.com
               </p>
             </div>
 
