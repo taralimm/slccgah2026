@@ -32,7 +32,7 @@ export default function Contact() {
                   <Mail className="w-5 h-5 text-[#0038a8] flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-bold text-slate-800">Secretariat Email</p>
-                    <p className="text-[#0038a8] font-semibold mt-0.5">charles8mendoza@gmail.com</p>
+                    <p className="text-[#0038a8] font-semibold mt-0.5">slsbatch2001@gmail.com</p>
                   </div>
                 </div>
 
