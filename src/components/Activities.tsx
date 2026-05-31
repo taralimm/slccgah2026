@@ -703,7 +703,7 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                   </a>
                 ) : selectedActivity.id === 'pickleball' ? (
                   <a 
-                    href="https://form.jotform.com/260768214727059"
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSdm8D0Un9hgHo3CeofOWVUjnew8uzPNO22hysia7L3Ck8ZM2Q/viewform"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-center rounded-xl text-xs sm:text-sm font-bold shadow-md transition-colors inline-flex items-center justify-center gap-1.5"
