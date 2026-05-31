@@ -548,7 +548,7 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                   <div className="flex flex-wrap gap-2.5 pt-4 border-t border-slate-100">
                     {act.id === 'homecoming' ? (
                       <a 
-                        href="https://docs.google.com/forms/d/e/1FAIpQLSdm8D0Un9hgHo3CeofOWVUjnew8uzPNO22hysia7L3Ck8ZM2Q/viewform"
+                        href="https://form.jotform.com/260768214727059"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="px-5 py-2.5 bg-[#0038a8] hover:bg-[#002e8c] text-white rounded-xl text-xs font-bold inline-flex items-center gap-1.5 shadow-sm transition-colors"
