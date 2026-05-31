@@ -1,5 +1,5 @@
 import { Clock, ArrowRight, BookOpen, ChevronRight } from 'lucide-react';
-import { ACTIVITIES_DATA, SPONSORS_DATA } from '../data.js';
+import { ACTIVITIES_DATA } from '../data.js';
 
 interface HomeProps {
   countdown: { days: number; hours: number; minutes: number; seconds: number };
@@ -323,31 +323,6 @@ export default function Home({ countdown, navigateToTab }: HomeProps) {
 
           </div>
 
-        </div>
-      </section>
-
-      {/* SPONSORS SECTION */}
-      <section className="py-20 bg-slate-50 border-t border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-10">
-          <span className="text-slate-400 font-extrabold text-xs uppercase tracking-widest block">Homecoming Sponsors & Community Partners</span>
-          <div className="flex flex-wrap justify-center items-center gap-12 sm:gap-16">
-            {SPONSORS_DATA.map((spon, idx) => (
-              <div key={idx} className="flex flex-col items-center gap-2 transition-all opacity-85 hover:opacity-100">
-                {spon.logo ? (
-                  <img 
-                    src={spon.logo} 
-                    alt={spon.name} 
-                    className="h-10 sm:h-12 object-contain bg-transparent rounded grayscale hover:grayscale-0 transition-all"
-                  />
-                ) : (
-                  <div className="h-12 w-36 border border-dashed border-slate-300 rounded-xl flex items-center justify-center bg-slate-100/60 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
-                    Placeholder
-                  </div>
-                )}
-                <span className="text-[10px] text-slate-500 font-medium">{spon.name}</span>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
