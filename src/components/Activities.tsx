@@ -556,6 +556,24 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                         Register Online
                         <ChevronRight className="w-3.5 h-3.5" />
                       </a>
+                    ) : act.id === 'pickleball' ? (
+                      <>
+                        <button
+                          onClick={() => setSelectedActivity(act)}
+                          className="px-5 py-2.5 bg-[#0038a8]/10 hover:bg-[#0038a8] text-[#0038a8] hover:text-white rounded-xl text-xs font-bold shadow-3xs transition-all"
+                        >
+                          View Brackets & Details
+                        </button>
+                        <a 
+                          href="https://form.jotform.com/260768214727059"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold inline-flex items-center gap-1.5 shadow-md transition-colors"
+                        >
+                          Register Now
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </a>
+                      </>
                     ) : (
                       <button
                         onClick={() => setSelectedActivity(act)}
@@ -564,12 +582,6 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                         View Brackets & Details
                       </button>
                     )}
-                    <button
-                      onClick={() => navigateToTab('contact')}
-                      className="px-5 py-2.5 border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-800 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 transition-colors animate-fade-in"
-                    >
-                      Contact Committee
-                    </button>
                   </div>
 
                 </div>
@@ -687,6 +699,16 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                     className="flex-1 py-3 bg-[#0038a8] hover:bg-[#002e8c] text-white text-center rounded-xl text-xs sm:text-sm font-bold shadow-md transition-colors inline-flex items-center justify-center gap-1.5"
                   >
                     Register Online
+                    <ChevronRight className="w-4 h-4" />
+                  </a>
+                ) : selectedActivity.id === 'pickleball' ? (
+                  <a 
+                    href="https://form.jotform.com/260768214727059"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-center rounded-xl text-xs sm:text-sm font-bold shadow-md transition-colors inline-flex items-center justify-center gap-1.5"
+                  >
+                    Register Now
                     <ChevronRight className="w-4 h-4" />
                   </a>
                 ) : (
