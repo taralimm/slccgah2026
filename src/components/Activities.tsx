@@ -548,7 +548,7 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                   <div className="flex flex-wrap gap-2.5 pt-4 border-t border-slate-100">
                     {act.id === 'homecoming' ? (
                       <a 
-                        href="https://form.jotform.com/260768214727059"
+                        href="https://docs.google.com/forms/d/e/1FAIpQLSdm8D0Un9hgHo3CeofOWVUjnew8uzPNO22hysia7L3Ck8ZM2Q/viewform"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="px-5 py-2.5 bg-[#0038a8] hover:bg-[#002e8c] text-white rounded-xl text-xs font-bold inline-flex items-center gap-1.5 shadow-sm transition-colors"
@@ -565,7 +565,7 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                           View Brackets & Details
                         </button>
                         <a 
-                          href="https://form.jotform.com/260768214727059"
+                          href="https://docs.google.com/forms/d/e/1FAIpQLSdm8D0Un9hgHo3CeofOWVUjnew8uzPNO22hysia7L3Ck8ZM2Q/viewform"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold inline-flex items-center gap-1.5 shadow-md transition-colors"
@@ -693,7 +693,7 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
               <div className="flex items-center gap-3 pt-5 border-t border-slate-100">
                 {selectedActivity.id === 'homecoming' ? (
                   <a 
-                    href="https://form.jotform.com/260768214727059"
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSdm8D0Un9hgHo3CeofOWVUjnew8uzPNO22hysia7L3Ck8ZM2Q/viewform"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 py-3 bg-[#0038a8] hover:bg-[#002e8c] text-white text-center rounded-xl text-xs sm:text-sm font-bold shadow-md transition-colors inline-flex items-center justify-center gap-1.5"
@@ -703,7 +703,7 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                   </a>
                 ) : selectedActivity.id === 'pickleball' ? (
                   <a 
-                    href="https://form.jotform.com/260768214727059"
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSdm8D0Un9hgHo3CeofOWVUjnew8uzPNO22hysia7L3Ck8ZM2Q/viewform"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-center rounded-xl text-xs sm:text-sm font-bold shadow-md transition-colors inline-flex items-center justify-center gap-1.5"
