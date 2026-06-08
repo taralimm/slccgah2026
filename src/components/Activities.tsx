@@ -14,22 +14,23 @@ function ActivityDetailStructure({ id }: { id: string }) {
       <div className="space-y-4">
         {/* Ticket pricing info and Promos */}
         <div className="grid sm:grid-cols-2 gap-3.5">
-          <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2.5 shadow-xs">
-            <div className="w-8 h-8 rounded-full bg-amber-150 text-amber-800 flex items-center justify-center font-extrabold text-[#b45309] text-xs shrink-0 select-none">
-              ₱800
+          <div className="p-4 bg-amber-50 border-2 border-amber-300 rounded-2xl flex items-center gap-4 shadow-sm">
+            <div className="text-center shrink-0 bg-amber-100/55 p-2 px-3.5 rounded-xl border border-amber-200">
+              <span className="block text-[9px] font-extrabold uppercase tracking-widest text-amber-700">REG RATE</span>
+              <span className="text-3xl font-black text-amber-950 tracking-tight block mt-0.5">₱800</span>
             </div>
             <div>
-              <p className="font-extrabold text-slate-900 text-[11px] uppercase tracking-wider">Registration fee</p>
-              <p className="text-slate-600 text-[11px] mt-0.5">Applies per player / brackets entry</p>
+              <p className="font-extrabold text-slate-905 text-xs uppercase tracking-wider">Per Player Entry</p>
+              <p className="text-slate-600 text-xs mt-1 leading-normal">Applies per player / bracket entry</p>
             </div>
           </div>
-          <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-2.5 shadow-xs">
-            <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-sm shrink-0 select-none">
+          <div className="p-4 bg-emerald-50 border border-emerald-250 rounded-2xl flex items-center gap-3 shadow-xs">
+            <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-2xl shrink-0 select-none">
               👕
             </div>
             <div>
-              <p className="font-extrabold text-emerald-800 text-[11px] uppercase tracking-wider">Free Commemorative Jersey</p>
-              <p className="text-slate-600 text-[10px] mt-0.5">Assured for registrations settled <span className="font-bold text-emerald-700">before May 31, 2026</span></p>
+              <p className="font-extrabold text-emerald-900 text-xs uppercase tracking-wider">Free Promo Jersey</p>
+              <p className="text-slate-650 text-[11px] mt-0.5">Guaranteed for registrations paid <span className="font-bold text-emerald-700">before May 31, 2026</span></p>
             </div>
           </div>
         </div>
@@ -121,22 +122,25 @@ function ActivityDetailStructure({ id }: { id: string }) {
       <div className="space-y-4">
         {/* Ticket pricing info and features */}
         <div className="grid sm:grid-cols-2 gap-3.5">
-          <div className="p-3 bg-indigo-50 border border-indigo-150 rounded-xl flex items-start gap-2.5 shadow-xs">
-            <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm shrink-0 select-none">
-              🎟️
+          <div className="p-4 bg-indigo-50 border-2 border-indigo-300 rounded-2xl flex items-center gap-4 shadow-sm animate-pulse-subtle">
+            <div className="text-center shrink-0 bg-indigo-150/40 p-2 px-3.5 rounded-xl border border-indigo-200">
+              <span className="block text-[9px] font-extrabold uppercase tracking-widest text-indigo-700">GATE FEE</span>
+              <span className="text-3xl font-black text-indigo-950 tracking-tight block mt-0.5">₱250</span>
             </div>
             <div>
-              <p className="font-extrabold text-slate-950 text-[11px] uppercase tracking-wider">Gate Entrance Package</p>
-              <p className="text-slate-600 text-[10px] mt-0.5">₱250 Includes <span className="font-bold text-indigo-700">1 FREE Beer</span> 🍺</p>
+              <p className="font-extrabold text-slate-950 text-xs uppercase tracking-wider">Gate Entrance Package</p>
+              <p className="text-slate-600 text-[11px] mt-1 leading-normal">
+                Includes <span className="font-extrabold text-indigo-700 bg-white border border-indigo-150 px-1.5 py-0.5 rounded inline-flex items-center gap-0.5 shadow-3xs">1 FREE Beer 🍺</span>
+              </p>
             </div>
           </div>
-          <div className="p-3 bg-[#0038a8]/5 border border-[#0038a8]/10 rounded-xl flex items-start gap-2.5 shadow-xs">
-            <div className="w-8 h-8 rounded-full bg-[#0038a8]/10 text-[#0038a8] flex items-center justify-center text-sm shrink-0 select-none">
+          <div className="p-4 bg-[#0038a8]/5 border border-[#0038a8]/15 rounded-2xl flex items-center gap-3 shadow-xs">
+            <div className="w-12 h-12 rounded-xl bg-blue-105/10 text-[#0038a8] flex items-center justify-center text-2xl shrink-0 select-none">
               🎸
             </div>
             <div>
-              <p className="font-extrabold text-[#0038a8] text-[11px] uppercase tracking-wider">Amazing Vibe</p>
-              <p className="text-slate-600 text-[10px] mt-0.5">Connect with fellow Louisians & enjoy live local acts!</p>
+              <p className="font-extrabold text-[#0038a8] text-xs uppercase tracking-wider">Amazing Vibe</p>
+              <p className="text-slate-650 text-[11px] mt-0.5">Connect with fellow Louisians & enjoy live local acts!</p>
             </div>
           </div>
         </div>
@@ -207,257 +211,12 @@ function ActivityDetailStructure({ id }: { id: string }) {
     );
   }
 
-  if (id === 'treeplanting') {
-    return (
-      <div className="space-y-4">
-        {/* General Highlights */}
-        <div className="grid sm:grid-cols-2 gap-3.5">
-          <div className="p-3 bg-emerald-50 border border-emerald-150 rounded-xl flex items-start gap-2.5 shadow-xs">
-            <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm shrink-0">
-              🌱
-            </div>
-            <div>
-              <p className="font-extrabold text-emerald-850 text-[11px] uppercase tracking-wider">Mangrove Ecology</p>
-              <p className="text-slate-600 text-[10px] mt-0.5">Seed 500+ healthy mangrove saplings inside protected Cebu zones</p>
-            </div>
-          </div>
-          <div className="p-3 bg-blue-50 border border-blue-100 rounded-xl flex items-start gap-2.5 shadow-xs">
-            <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm shrink-0">
-              🍱
-            </div>
-            <div>
-              <p className="font-extrabold text-blue-800 text-[11px] uppercase tracking-wider">Volunteer Kit</p>
-              <p className="text-slate-600 text-[10px] mt-0.5">Free lunch box, hydration gear, and official ecology certificate</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Schedule layout */}
-        <div className="border border-slate-100 rounded-xl overflow-hidden shadow-sm bg-slate-55/40">
-          <div className="bg-emerald-50/50 border-b border-emerald-100 px-4 py-2 flex items-center justify-between">
-            <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
-              <CheckSquare className="w-4 h-4" /> Assembly & Guidelines
-            </span>
-            <span className="text-[10px] text-emerald-700 font-bold uppercase">7:00 AM Departure</span>
-          </div>
-          <div className="p-3.5 space-y-2.5 text-xs text-slate-600">
-            <div className="flex gap-2.5 items-start">
-              <span className="font-mono text-emerald-800 font-bold">06:00</span>
-              <p><span className="font-extrabold text-slate-900 block mb-0.5">Alumni Assembly:</span> Gather at the SLCC Main Hallways for safety brief, instructions, and environmental setup guide.</p>
-            </div>
-            <div className="flex gap-2.5 items-start pt-2 border-t border-slate-10/40">
-              <span className="font-mono text-emerald-800 font-bold">07:00</span>
-              <p><span className="font-extrabold text-slate-900 block mb-0.5">Shuttle caravan departure:</span> Safe, comfortable, and coordinated transportation provided to the coastal conservation area.</p>
-            </div>
-            <div className="flex gap-2.5 items-start pt-2 border-t border-slate-10/40">
-              <span className="font-mono text-emerald-800 font-bold">08:00</span>
-              <p><span className="font-extrabold text-slate-900 block mb-0.5">Planting Execution:</span> Coordinated team assignments. Saplings, boots, and tools provided free.</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Details footer */}
-        <div className="grid sm:grid-cols-2 gap-2 text-xs">
-          <div className="flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-            <span className="text-slate-400 font-bold uppercase text-[9px] tracking-wider shrink-0">Site Location:</span>
-            <span className="font-bold text-slate-700">Consolacion Eco Mangrove Zone</span>
-          </div>
-          <div className="flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-            <span className="text-slate-400 font-bold uppercase text-[9px] tracking-wider shrink-0">Ecology Partner:</span>
-            <span className="font-semibold text-emerald-700">Ceb-DENR Office</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (id === 'medical') {
-    return (
-      <div className="space-y-4">
-        {/* General Highlights */}
-        <div className="grid sm:grid-cols-2 gap-3.5">
-          <div className="p-3 bg-red-50 border border-red-150 rounded-xl flex items-start gap-2.5 shadow-xs">
-            <div className="w-8 h-8 rounded-full bg-red-100 text-red-700 flex items-center justify-center text-sm shrink-0">
-              ❤️
-            </div>
-            <div>
-              <p className="font-extrabold text-red-850 text-[11px] uppercase tracking-wider">Clinics & Meds</p>
-              <p className="text-slate-600 text-[10px] mt-0.5">Free consultations, dental decay extraction, and vital maintenance medicines</p>
-            </div>
-          </div>
-          <div className="p-3 bg-blue-50 border border-blue-100 rounded-xl flex items-start gap-2.5 shadow-xs">
-            <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm shrink-0">
-              ⚖️
-            </div>
-            <div>
-              <p className="font-extrabold text-blue-800 text-[11px] uppercase tracking-wider">Gratis Law Consulting</p>
-              <p className="text-slate-600 text-[10px] mt-0.5">Free basic legal drafting, general witness advisory, and consultations</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Schedule layout */}
-        <div className="border border-slate-100 rounded-xl overflow-hidden shadow-sm bg-slate-55/40">
-          <div className="bg-red-50/50 border-b border-red-100 px-4 py-2 flex items-center justify-between">
-            <span className="text-xs font-bold text-red-800 uppercase tracking-wider flex items-center gap-1.5">
-              <CheckSquare className="w-4 h-4" /> Available Civic Services
-            </span>
-            <span className="text-[10px] text-red-700 font-bold uppercase">8:00 AM – 4:00 PM</span>
-          </div>
-          <div className="p-3.5 space-y-2.5 text-xs text-slate-600">
-            <p className="leading-relaxed"><span className="font-black text-slate-900 block mb-0.5">🩺 General Health screenings:</span> Diagnostic check-ups, sugar levels tests, and pediatric checks administered by registered alumni MDs.</p>
-            <p className="leading-relaxed pt-2 border-t border-slate-10/40"><span className="font-black text-slate-900 block mb-0.5">🦷 Dental Station:</span> Safe tooth extractions and hygiene gift baskets containing kits and pediatric pastes.</p>
-            <p className="leading-relaxed pt-2 border-t border-slate-10/40"><span className="font-black text-slate-900 block mb-0.5">⚖️ Legal Aid Corner:</span> Professional lawyers giving counsel on contracts, family estate parameters, and basic notarization.</p>
-          </div>
-        </div>
-
-        {/* Details footer */}
-        <div className="grid sm:grid-cols-2 gap-2 text-xs">
-          <div className="flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-            <span className="text-slate-400 font-bold uppercase text-[9px] tracking-wider shrink-0">Medical Venue:</span>
-            <span className="font-bold text-slate-700">SLCC Elementary Hallways</span>
-          </div>
-          <div className="flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-            <span className="text-slate-400 font-bold uppercase text-[9px] tracking-wider shrink-0">Volunteers:</span>
-            <span className="font-semibold text-[#0038a8]">SLCC Alumni Doctors & Friends</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (id === 'feeding') {
-    return (
-      <div className="space-y-4">
-        {/* General Highlights */}
-        <div className="grid sm:grid-cols-2 gap-3.5">
-          <div className="p-3 bg-amber-50 border border-amber-100 rounded-xl flex items-start gap-2.5 shadow-xs">
-            <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-sm shrink-0">
-              🥣
-            </div>
-            <div>
-              <p className="font-extrabold text-amber-850 text-[11px] uppercase tracking-wider">Nutrition Soup Kitchen</p>
-              <p className="text-slate-600 text-[10px] mt-0.5">Giving healthy formulated meals and fruit desserts to municipal children</p>
-            </div>
-          </div>
-          <div className="p-3 bg-pink-50 border border-pink-100 rounded-xl flex items-start gap-2.5 shadow-xs">
-            <div className="w-8 h-8 rounded-full bg-pink-100 text-pink-700 flex items-center justify-center text-sm shrink-0">
-              🥳
-            </div>
-            <div>
-              <p className="font-extrabold text-pink-800 text-[11px] uppercase tracking-wider">Youth Interaction</p>
-              <p className="text-slate-600 text-[10px] mt-0.5">Spreading joy with storybook reading desks, custom bags, and school giveaways</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Schedule layout */}
-        <div className="border border-slate-100 rounded-xl overflow-hidden shadow-sm bg-slate-55/40">
-          <div className="bg-amber-50/50 border-b border-amber-100 px-4 py-2 flex items-center justify-between">
-            <span className="text-xs font-bold text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
-              <CheckSquare className="w-4 h-4" /> Program Flow
-            </span>
-            <span className="text-[10px] text-amber-700 font-bold uppercase">Time: 9:00 AM – 12:00 PM</span>
-          </div>
-          <div className="p-3.5 space-y-2.5 text-xs text-slate-600 font-sans">
-            <p className="leading-relaxed"><span className="font-black text-slate-900 block mb-0.5">🍲 Formulated Meals:</span> Serve iron-fortified proteins, delicious hot soup, vitamins, and local sweet-citrus fruits.</p>
-            <p className="leading-relaxed pt-2 border-t border-slate-10/40"><span className="font-black text-slate-900 block mb-0.5">📖 Literacy Circle:</span> Interactive book-reading stations. Storytellers coordinate with the children for quick prizes.</p>
-          </div>
-        </div>
-
-        {/* Details footer */}
-        <div className="grid sm:grid-cols-2 gap-2 text-xs">
-          <div className="flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-            <span className="text-slate-400 font-bold uppercase text-[9px] tracking-wider shrink-0">Area:</span>
-            <span className="font-bold text-slate-700">Sudlon Community Open Space</span>
-          </div>
-          <div className="flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-            <span className="text-slate-400 font-bold uppercase text-[9px] tracking-wider shrink-0">Partners:</span>
-            <span className="font-semibold text-[#0038a8]">SLCC Student Council</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (id === 'homecoming') {
-    return (
-      <div className="space-y-4">
-        {/* Requirements */}
-        <div className="grid sm:grid-cols-2 gap-3.5">
-          <div className="p-3 bg-blue-50 border border-blue-105 rounded-xl flex items-start gap-2.5 shadow-xs">
-            <div className="w-8 h-8 rounded-full bg-blue-100 text-[#0038a8] flex items-center justify-center font-bold text-sm shrink-0">
-              🎫
-            </div>
-            <div>
-              <p className="font-extrabold text-slate-950 text-[11px] uppercase tracking-wider">Fast-Pass QR Entrance</p>
-              <p className="text-slate-600 text-[10px] mt-0.5">Redeem pre-registered Jotform QR keys securely at portal gates</p>
-            </div>
-          </div>
-          <div className="p-3 bg-fuchsia-50 border border-fuchsia-100 rounded-xl flex items-start gap-2.5 shadow-xs">
-            <div className="w-8 h-8 rounded-full bg-fuchsia-100 text-fuchsia-700 flex items-center justify-center text-sm shrink-0">
-              🕺
-            </div>
-            <div>
-              <p className="font-extrabold text-[#0038a8] text-[11px] uppercase tracking-wider">Recommended Style</p>
-              <p className="text-slate-600 text-[10px] mt-0.5">Classic 90's Throwback! windbreakers, high flannels, retro sneakers</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Schedule layout */}
-        <div className="border border-slate-100 rounded-xl overflow-hidden shadow-sm bg-slate-55/40">
-          <div className="bg-[#0038a8] border-b border-[#0038a8]/10 px-4 py-2 flex items-center justify-between text-white">
-            <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <Award className="w-4 h-4" /> HOMECOMING PROGRAM
-            </span>
-            <span className="text-[10px] font-bold uppercase">Main Gymnasium</span>
-          </div>
-          <div className="p-3.5 space-y-2 text-xs text-slate-650">
-            <div className="flex justify-between items-center pb-1.5 border-b border-slate-100">
-              <span className="font-bold text-[#0038a8] shrink-0 w-12 font-mono">16:00</span>
-              <span className="text-slate-800 flex-grow text-left pl-2">Alumni Gates Open: Polaroid Photo Boothes & Welcome Mixtapes</span>
-            </div>
-            <div className="flex justify-between items-center pb-1.5 border-b border-slate-100">
-              <span className="font-bold text-[#0038a8] shrink-0 w-12 font-mono">18:00</span>
-              <span className="text-slate-800 flex-grow text-left pl-2">Welcome Dinner & Alumni Speech Panels</span>
-            </div>
-            <div className="flex justify-between items-center pb-1.5 border-b border-slate-100">
-              <span className="font-bold text-[#0038a8] shrink-0 w-12 font-mono">19:30</span>
-              <span className="text-slate-800 flex-grow text-left pl-2">Class Roll-Call Video Segment & Batch Salutations</span>
-            </div>
-            <div className="flex justify-between items-center pb-1.5 border-b border-slate-100">
-              <span className="font-bold text-[#0038a8] shrink-0 w-12 font-mono">20:30</span>
-              <span className="text-slate-800 flex-grow text-left pl-2">Homecoming Lucky Draw (Grand prize: Brand-new scooter!)</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="font-bold text-[#0038a8] shrink-0 w-12 font-mono">21:15</span>
-              <span className="text-slate-800 flex-grow text-left pl-2">Open Neon Dancefloor, Karaoke, & Live DJ Session</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Details footer */}
-        <div className="grid sm:grid-cols-2 gap-2 text-xs">
-          <div className="flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-100 animate-pulse">
-            <span className="text-slate-400 font-bold uppercase text-[9px] tracking-wider shrink-0">Main Arena:</span>
-            <span className="font-black text-[#0038a8]">SLCC Grand Arena Complex</span>
-          </div>
-          <div className="flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-            <span className="text-slate-400 font-bold uppercase text-[9px] tracking-wider shrink-0">Coordinating:</span>
-            <span className="font-semibold text-slate-700">General Secretariat Committee</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="bg-slate-50 p-3 rounded-lg flex items-start gap-2 border border-slate-100 text-xs">
-      <Info className="w-4 h-4 text-[#0038a8] mt-0.5 flex-shrink-0" />
+    <div className="bg-slate-50 p-4 rounded-xl flex items-start gap-3 border border-slate-100 text-xs shadow-3xs">
+      <Info className="w-4.5 h-4.5 text-[#0038a8] mt-0.5 flex-shrink-0" />
       <div>
-        <p className="font-bold text-slate-850">More Event parameters coming soon</p>
-        <p className="text-slate-500">Contact the Batch coordinators for specific inquiries.</p>
+        <p className="font-extrabold text-slate-900 text-xs uppercase tracking-wider">More Details Coming Soon</p>
+        <p className="text-slate-500 mt-1 leading-relaxed">Specific details for this activity are currently being finalized. Please check back soon or contact the organizers for inquiry.</p>
       </div>
     </div>
   );
@@ -608,7 +367,7 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                         onClick={() => setSelectedActivity(act)}
                         className="px-5 py-2.5 bg-[#0038a8]/10 hover:bg-[#0038a8] text-[#0038a8] hover:text-white rounded-xl text-xs font-bold shadow-3xs transition-all"
                       >
-                        View Brackets & Details
+                        {act.id === 'musicfest' ? 'View Line-Up & Details' : 'View Event Details'}
                       </button>
                     )}
                   </div>
