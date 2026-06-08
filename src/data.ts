@@ -25,7 +25,9 @@ export const ACTIVITIES_DATA: Activity[] = [
     title: "Louisian Music Fest",
     date: "Saturday, June 27, 2026 | 8:00 PM",
     category: "Fundraising Activity",
-    description: "Some friendships start in the classroom. Others start at a gig. On June 27, we're bringing together Louisians, old friends, new faces, and music lovers for a night of live performances, cold beer, and great memories in the making. 🍻🎶🤘",
+    description: "One stage. Multiple bands. One unforgettable night.
+
+Get ready for an evening of live music, great company, and the kind of energy that only happens when people come together for something they love. 🎶⚡",
     details: "GATE FEE: ₱250 with 1 FREE Beer. Venue: J-Cob's Cosina Bar & KTV. Featuring Live Performances By: Nicholay, Pointblank Cebu, ILK PH, The Manyanas, Stallions of the Burning Church, System Undone, WED at Wendy's.",
     image: "/Musicfest-flyer.jpg"
   },
