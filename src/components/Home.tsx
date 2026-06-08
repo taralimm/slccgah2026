@@ -321,7 +321,13 @@ export default function Home({ countdown, navigateToTab }: HomeProps) {
                   <span className="flex items-center gap-1">📍 J-Cob’s Cosina Bar & KTV</span>
                 </div>
                 <p className="text-slate-600 leading-relaxed text-sm">
-                  Some friendships start in the classroom. Others start at a gig. On June 27, we're bringing together Louisians, old friends, new faces, and music lovers for a night of live performances, cold beer, and great memories in the making. 🍻🎶🤘 Featuring live sets from <strong>Nicholay, Pointblank Cebu, ILK PH, The Manyanas, Stallions of the Burning Church, System Undone</strong>, and <strong>WED at Wendy's</strong>. Gate entry package includes 1 FREE Beer!
+                  The lights go up. The amps turn on. The crowd comes alive.
+
+This June 27, SLCC MusicFest brings together talented bands, passionate music lovers, and an electric atmosphere for a night filled with unforgettable performances. 🎸🎤🎶
+
+Come for the music. Stay for the experience. Leave with memories worth replaying.
+
+See you in front of the stage.
                 </p>
                 <div className="pt-2">
                   <button 
