@@ -176,15 +176,15 @@ export default function Home({ countdown, navigateToTab }: HomeProps) {
                     onError={(e) => {
                       const target = e.currentTarget;
                       const currentSrc = target.src || '';
-                      const fallbacks = [
-                        "/SLCC Pickleball event banner.jpg",
-                        "/SLCC_Pickleball_event_banner.jpg",
-                        "/slcc_pickleball_event_banner.jpg",
-                        "/src/assets/images/SLCC Pickleball event banner.jpg",
-                        "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80"
-                      ];
                       
                       if (currentSrc.toLowerCase().includes('pickleball')) {
+                        const fallbacks = [
+                          "/SLCC Pickleball event banner.jpg",
+                          "/SLCC_Pickleball_event_banner.jpg",
+                          "/slcc_pickleball_event_banner.jpg",
+                          "/src/assets/images/SLCC Pickleball event banner.jpg",
+                          "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80"
+                        ];
                         let nextIndex = 0;
                         if (currentSrc.includes('SLCC_Pickleball')) nextIndex = 2;
                         else if (currentSrc.includes('slcc_pickleball')) nextIndex = 3;
@@ -192,6 +192,8 @@ export default function Home({ countdown, navigateToTab }: HomeProps) {
                         else nextIndex = 1;
                         
                         target.src = fallbacks[nextIndex];
+                      } else if (currentSrc.toLowerCase().includes('musicfest')) {
+                        target.src = "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=80";
                       }
                     }}
                   />
@@ -296,26 +298,37 @@ export default function Home({ countdown, navigateToTab }: HomeProps) {
 
             {/* Fundraising 2: Music Fest */}
             <div className="flex flex-col lg:flex-row-reverse gap-8 items-center bg-slate-50 p-6 sm:p-8 rounded-2xl border border-slate-100">
-              <div className="w-full lg:w-1/2 rounded-xl overflow-hidden aspect-[16/10] bg-slate-200">
+              <div className="w-full lg:w-1/2 rounded-xl overflow-hidden aspect-[16/10] bg-slate-200 relative group/homeimg">
                 <img 
-                  src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=80" 
+                  src="/Musicfest-flyer.jpg" 
                   alt="Louisian Music Fest" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover/homeimg:scale-102"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    const currentSrc = target.src || '';
+                    if (currentSrc.toLowerCase().includes('musicfest')) {
+                      target.src = "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=80";
+                    }
+                  }}
                 />
               </div>
               <div className="w-full lg:w-1/2 space-y-4">
-                <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block">Featured fundraiser</span>
+                <span className="text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-150 px-2.5 py-0.5 rounded uppercase tracking-wider inline-block">Featured fundraiser</span>
                 <h3 className="text-2xl font-extrabold text-slate-900">Louisian Music Fest</h3>
-                <p className="text-sm font-semibold text-slate-500">Date: June 27, 2026</p>
+                <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 font-semibold">
+                  <span className="flex items-center gap-1">📅 Saturday, June 27</span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1">📍 J-Cob’s Cosina Bar & KTV</span>
+                </div>
                 <p className="text-slate-600 leading-relaxed text-sm">
-                  Jam with fellow Louisians! Our acoustic concert series plays alternative classics, vintage pop melodies, and legendary soundtracks from the 90s decade. Features professional production, interactive request boxes, food merchandise panels, and custom-brewed refreshments.
+                  Some friendships start in the classroom. Others start at a gig. On June 27, we're bringing together Louisians, old friends, new faces, and music lovers for a night of live performances, cold beer, and great memories in the making. 🍻🎶🤘 Featuring live sets from <strong>Nicholay, Pointblank Cebu, ILK PH, The Manyanas, Stallions of the Burning Church, System Undone</strong>, and <strong>WED at Wendy's</strong>. Gate entry package includes 1 FREE Beer!
                 </p>
                 <div className="pt-2">
                   <button 
                     onClick={() => navigateToTab('activities')}
                     className="px-6 py-2.5 bg-[#0038a8] text-white hover:bg-[#002e8c] rounded-full text-sm font-bold transition-colors"
                   >
-                    View Line-Ups & Tickets
+                    View Band Line-Up & Details
                   </button>
                 </div>
               </div>
