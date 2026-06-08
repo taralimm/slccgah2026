@@ -23,18 +23,18 @@ export const ACTIVITIES_DATA: Activity[] = [
   {
     id: 'musicfest',
     title: "Louisian Music Fest",
-    date: "June 27, 2026",
+    date: "Saturday, June 27, 2026 | 8:00 PM",
     category: "Fundraising Activity",
-    description: "An open-air evening acoustic event featuring local nostalgic acoustic bands singing 90s alternative rock hits and pop classics.",
-    details: "More Details Coming Soon",
-    image: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=80"
+    description: "Some friendships start in the classroom. Others start at a gig. On June 27, we're bringing together Louisians, old friends, new faces, and music lovers for a night of live performances, cold beer, and great memories in the making. 🍻🎶🤘",
+    details: "GATE FEE: ₱250 with 1 FREE Beer. Venue: J-Cob's Cosina Bar & KTV. Featuring Live Performances By: Nicholay, Pointblank Cebu, ILK PH, The Manyanas, Stallions of the Burning Church, System Undone, WED at Wendy's.",
+    image: "/Musicfest-flyer.jpg"
   },
   {
     id: 'treeplanting',
     title: "Tree Planting Activity",
     date: "July 11, 2026",
     category: "Community Outreach Activity",
-    description: "Bridging alumni and environmental protection. Help us seed mangrove saplings and foster clean future coastlines for Saint Louis College-Cebu's future.",
+    description: "More Details Coming Soon",
     details: "More Details Coming Soon",
     image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80"
   },
@@ -43,7 +43,7 @@ export const ACTIVITIES_DATA: Activity[] = [
     title: "Medical & Dental Mission with Legal Services",
     date: "July 18, 2026",
     category: "Community Outreach Activity",
-    description: "A comprehensive civic compassion service providing free basic health consults, dental checkups, essential medicines, and gratis legal counsel to neighbors.",
+    description: "More Details Coming Soon",
     details: "More Details Coming Soon",
     image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80"
   },
@@ -52,7 +52,7 @@ export const ACTIVITIES_DATA: Activity[] = [
     title: "Feeding Program",
     date: "July 25, 2026",
     category: "Community Outreach Activity",
-    description: "Spreading joy and proper nutrition to children in local community areas of consolacion and adjacent cities in Cebu.",
+    description: "More Details Coming Soon",
     details: "More Details Coming Soon",
     image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80"
   },
@@ -61,7 +61,7 @@ export const ACTIVITIES_DATA: Activity[] = [
     title: "SLCC Grand Alumni Homecoming 2026",
     date: "August 1, 2026",
     category: "Main Event",
-    description: "The main arena night: '90's Throwback Reunion'. Get ready to throw it back to the dopest decade with retro photo zones, karaoke, trivia, and food panels.",
+    description: "More Details Coming Soon",
     details: "More Details Coming Soon",
     image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80"
   }
