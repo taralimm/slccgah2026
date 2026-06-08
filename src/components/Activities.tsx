@@ -122,58 +122,85 @@ function ActivityDetailStructure({ id }: { id: string }) {
         {/* Ticket pricing info and features */}
         <div className="grid sm:grid-cols-2 gap-3.5">
           <div className="p-3 bg-indigo-50 border border-indigo-150 rounded-xl flex items-start gap-2.5 shadow-xs">
-            <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm shrink-0">
-              🎫
+            <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm shrink-0 select-none">
+              🎟️
             </div>
             <div>
-              <p className="font-extrabold text-slate-950 text-[11px] uppercase tracking-wider">Acoustic Access</p>
-              <p className="text-slate-600 text-[10px] mt-0.5">₱250 Includes retro stickers & a complementary drink</p>
+              <p className="font-extrabold text-slate-950 text-[11px] uppercase tracking-wider">Gate Entrance Package</p>
+              <p className="text-slate-600 text-[10px] mt-0.5">₱250 Includes <span className="font-bold text-indigo-700">1 FREE Beer</span> 🍺</p>
             </div>
           </div>
           <div className="p-3 bg-[#0038a8]/5 border border-[#0038a8]/10 rounded-xl flex items-start gap-2.5 shadow-xs">
-            <div className="w-8 h-8 rounded-full bg-[#0038a8]/10 text-[#0038a8] flex items-center justify-center text-sm shrink-0">
+            <div className="w-8 h-8 rounded-full bg-[#0038a8]/10 text-[#0038a8] flex items-center justify-center text-sm shrink-0 select-none">
               🎸
             </div>
             <div>
-              <p className="font-extrabold text-[#0038a8] text-[11px] uppercase tracking-wider">Line-Up Style</p>
-              <p className="text-slate-600 text-[10px] mt-0.5">Classic 90s unplugged rock & tribute acoustics</p>
+              <p className="font-extrabold text-[#0038a8] text-[11px] uppercase tracking-wider">Amazing Vibe</p>
+              <p className="text-slate-600 text-[10px] mt-0.5">Connect with fellow Louisians & enjoy live local acts!</p>
             </div>
           </div>
         </div>
 
-        {/* Timeline block */}
+        {/* Bands Line-Up block */}
         <div className="border border-slate-100 rounded-xl overflow-hidden shadow-sm bg-slate-55/40">
-          <div className="bg-[#0038a8]/5 border-b border-slate-100 px-4 py-2 flex items-center justify-between">
+          <div className="bg-[#0038a8]/5 border-b border-slate-100 px-4 py-2.5 flex items-center justify-between">
             <span className="text-xs font-bold text-[#0038a8] uppercase tracking-wider flex items-center gap-1.5">
-              <Users className="w-4 h-4" /> Night Jams & Merchandise
+              <Award className="w-4 h-4 text-[#0038a8]" /> ROCKING LIVE PERFORMANCES BY
             </span>
-            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">PM Schedule</span>
+            <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest bg-slate-150/50 px-2 py-0.5 rounded">Line-Up</span>
           </div>
-          <div className="p-3.5 space-y-2.5 text-xs text-slate-600">
-            <div className="flex gap-2.5 items-start">
-              <span className="font-mono text-[#0038a8] font-bold">17:00</span>
-              <p><span className="font-extrabold text-slate-900 block mb-0.5">Merch & Food Fair Open:</span> Experience nostalgic visual displays, coordinate batch food stalls, and customize your own vinyl decals.</p>
+          <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <div className="flex items-center gap-1.5 bg-white p-2 rounded-lg border border-slate-100 shadow-3xs font-semibold text-slate-800">
+              ⚡ Nicholay
             </div>
-            <div className="flex gap-2.5 items-start pt-2 border-t border-slate-10/40">
-              <span className="font-mono text-[#0038a8] font-bold">18:30</span>
-              <p><span className="font-extrabold text-slate-900 block mb-0.5">Louisian Tribute Requests:</span> Dedicate legendary alternative and pop classics. Interactive jukebox system.</p>
+            <div className="flex items-center gap-1.5 bg-white p-2 rounded-lg border border-slate-100 shadow-3xs font-semibold text-slate-800">
+              ⚡ Pointblank Cebu
             </div>
-            <div className="flex gap-2.5 items-start pt-2 border-t border-slate-10/40">
-              <span className="font-mono text-[#0038a8] font-bold">20:00</span>
-              <p><span className="font-extrabold text-slate-900 block mb-0.5">Unplugged Main Acoustic Set:</span> Re-live the legendary hits from alternative bands in the outdoor lawn.</p>
+            <div className="flex items-center gap-1.5 bg-white p-2 rounded-lg border border-slate-100 shadow-3xs font-semibold text-slate-800">
+              ⚡ ILK PH
+            </div>
+            <div className="flex items-center gap-1.5 bg-white p-2 rounded-lg border border-slate-100 shadow-3xs font-semibold text-slate-800">
+              ⚡ The Manyanas
+            </div>
+            <div className="flex items-center gap-1.5 bg-white p-2 rounded-lg border border-slate-100 shadow-3xs font-semibold text-slate-800">
+              ⚡ Stallions of the Burning Church
+            </div>
+            <div className="flex items-center gap-1.5 bg-white p-2 rounded-lg border border-slate-100 shadow-3xs font-semibold text-slate-800">
+              ⚡ System Undone
+            </div>
+            <div className="sm:col-span-2 flex items-center justify-center gap-1.5 bg-amber-50/50 p-2 rounded-lg border border-amber-100 shadow-3xs font-bold text-amber-900">
+              ⚡ WED at Wendy's
             </div>
           </div>
         </div>
 
-        {/* Details footer */}
+        {/* Details footer Venue / Date */}
         <div className="grid sm:grid-cols-2 gap-2 text-xs">
           <div className="flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-            <span className="text-slate-400 font-bold uppercase text-[9px] tracking-wider shrink-0">Stage:</span>
-            <span className="font-bold text-slate-700">Campus Plaza Open Grounds</span>
+            <span className="text-slate-400 font-bold uppercase text-[9px] tracking-wider shrink-0">Stage/Venue:</span>
+            <span className="font-extrabold text-[#0038a8] flex items-center gap-1">
+              <MapPin className="w-3.5 h-3.5 text-red-500 animate-bounce" /> J-Cob's Cosina Bar & KTV
+            </span>
           </div>
           <div className="flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-            <span className="text-slate-400 font-bold uppercase text-[9px] tracking-wider shrink-0">Vibe:</span>
-            <span className="font-semibold text-indigo-700">Unplugged retro rock</span>
+            <span className="text-slate-400 font-bold uppercase text-[9px] tracking-wider shrink-0">Schedule:</span>
+            <span className="font-semibold text-slate-700 flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5 text-slate-500" /> Saturday, June 27 | 8:00 PM
+            </span>
+          </div>
+        </div>
+
+        {/* Sponsors list/Special Thanks list */}
+        <div className="border border-slate-100 rounded-xl p-3 bg-slate-50/60 shadow-3xs space-y-1.5">
+          <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Sponsors & Special Thanks:</span>
+          <div className="flex flex-wrap gap-1.5 text-[9px] text-slate-600 font-medium">
+            <span className="bg-white px-2 py-0.5 rounded border border-slate-200">J-Cob’s Cosina Bar & KTV</span>
+            <span className="bg-white px-2 py-0.5 rounded border border-slate-200">San Miguel Beer Corporation</span>
+            <span className="bg-white px-2 py-0.5 rounded border border-slate-200">Music Lab</span>
+            <span className="bg-white px-2 py-0.5 rounded border border-slate-200">Dahul Engineering Services</span>
+            <span className="bg-white px-2 py-0.5 rounded border border-slate-200">JKV Studio</span>
+            <span className="bg-white px-2 py-0.5 rounded border border-slate-200">UBEC Gigcase</span>
+            <span className="bg-[#0038a8]/5 text-[#0038a8] px-2 py-0.5 rounded border border-[#0038a8]/10 font-bold">SLCC Alumni Association</span>
           </div>
         </div>
       </div>
@@ -486,15 +513,15 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                     onError={(e) => {
                       const target = e.currentTarget;
                       const currentSrc = target.src || '';
-                      const fallbacks = [
-                        "/SLCC Pickleball event banner.jpg",
-                        "/SLCC_Pickleball_event_banner.jpg",
-                        "/slcc_pickleball_event_banner.jpg",
-                        "/src/assets/images/SLCC Pickleball event banner.jpg",
-                        "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80"
-                      ];
                       
                       if (currentSrc.toLowerCase().includes('pickleball')) {
+                        const fallbacks = [
+                          "/SLCC Pickleball event banner.jpg",
+                          "/SLCC_Pickleball_event_banner.jpg",
+                          "/slcc_pickleball_event_banner.jpg",
+                          "/src/assets/images/SLCC Pickleball event banner.jpg",
+                          "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80"
+                        ];
                         let nextIndex = 0;
                         if (currentSrc.includes('SLCC_Pickleball')) nextIndex = 2;
                         else if (currentSrc.includes('slcc_pickleball')) nextIndex = 3;
@@ -502,6 +529,8 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                         else nextIndex = 1;
                         
                         target.src = fallbacks[nextIndex];
+                      } else if (currentSrc.toLowerCase().includes('musicfest')) {
+                        target.src = "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=80";
                       }
                     }}
                   />
@@ -565,10 +594,10 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                           View Brackets & Details
                         </button>
                         <a 
-                          href="https://docs.google.com/forms/d/e/1FAIpQLSdm8D0Un9hgHo3CeofOWVUjnew8uzPNO22hysia7L3Ck8ZM2Q/viewform"
+                          href="https://form.jotform.com/260768214727059"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-5 py-2.5 bg-[#0038a8] hover:bg-[#002e8c] text-white rounded-xl text-xs font-bold inline-flex items-center gap-1.5 shadow-md transition-colors"
+                          className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold inline-flex items-center gap-1.5 shadow-md transition-colors"
                         >
                           Register Now
                           <ChevronRight className="w-3.5 h-3.5" />
@@ -622,15 +651,15 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                   onError={(e) => {
                     const target = e.currentTarget;
                     const currentSrc = target.src || '';
-                    const fallbacks = [
-                      "/SLCC Pickleball event banner.jpg",
-                      "/SLCC_Pickleball_event_banner.jpg",
-                      "/slcc_pickleball_event_banner.jpg",
-                      "/src/assets/images/SLCC Pickleball event banner.jpg",
-                      "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80"
-                    ];
                     
                     if (currentSrc.toLowerCase().includes('pickleball')) {
+                      const fallbacks = [
+                        "/SLCC Pickleball event banner.jpg",
+                        "/SLCC_Pickleball_event_banner.jpg",
+                        "/slcc_pickleball_event_banner.jpg",
+                        "/src/assets/images/SLCC Pickleball event banner.jpg",
+                        "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80"
+                      ];
                       let nextIndex = 0;
                       if (currentSrc.includes('SLCC_Pickleball')) nextIndex = 2;
                       else if (currentSrc.includes('slcc_pickleball')) nextIndex = 3;
@@ -638,6 +667,8 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                       else nextIndex = 1;
                       
                       target.src = fallbacks[nextIndex];
+                    } else if (currentSrc.toLowerCase().includes('musicfest')) {
+                      target.src = "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=80";
                     }
                   }}
                 />
@@ -693,7 +724,7 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
               <div className="flex items-center gap-3 pt-5 border-t border-slate-100">
                 {selectedActivity.id === 'homecoming' ? (
                   <a 
-                    href="https://docs.google.com/forms/d/e/1FAIpQLSdm8D0Un9hgHo3CeofOWVUjnew8uzPNO22hysia7L3Ck8ZM2Q/viewform"
+                    href="https://form.jotform.com/260768214727059"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 py-3 bg-[#0038a8] hover:bg-[#002e8c] text-white text-center rounded-xl text-xs sm:text-sm font-bold shadow-md transition-colors inline-flex items-center justify-center gap-1.5"
@@ -703,10 +734,10 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                   </a>
                 ) : selectedActivity.id === 'pickleball' ? (
                   <a 
-                    href="https://docs.google.com/forms/d/e/1FAIpQLSdm8D0Un9hgHo3CeofOWVUjnew8uzPNO22hysia7L3Ck8ZM2Q/viewform"
+                    href="https://form.jotform.com/260768214727059"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 py-3 bg-[#0038a8] hover:bg-[#002e8c] text-white text-center rounded-xl text-xs sm:text-sm font-bold shadow-md transition-colors inline-flex items-center justify-center gap-1.5"
+                    className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-center rounded-xl text-xs sm:text-sm font-bold shadow-md transition-colors inline-flex items-center justify-center gap-1.5"
                   >
                     Register Now
                     <ChevronRight className="w-4 h-4" />
