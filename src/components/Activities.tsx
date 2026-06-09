@@ -321,7 +321,7 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                       {act.title}
                     </h3>
 
-                    <p className="text-slate-600 font-medium text-sm leading-relaxed mt-2">
+                    <p className="text-slate-600 font-medium text-sm leading-relaxed mt-2 whitespace-pre-line">
                       {act.description}
                     </p>
 
@@ -469,7 +469,7 @@ export default function Activities({ triggerToast, navigateToTab }: ActivitiesPr
                   </p>
                 </div>
 
-                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed whitespace-pre-line">
                   {selectedActivity.description}
                 </p>
 
