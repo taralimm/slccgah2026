@@ -279,9 +279,17 @@ export default function Home({ countdown, navigateToTab }: HomeProps) {
                 />
               </div>
               <div className="w-full lg:w-1/2 space-y-4">
-                <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block">Featured fundraiser</span>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-150 px-2.5 py-0.5 rounded uppercase tracking-wider inline-block">Featured fundraiser</span>
                 <h3 className="text-2xl font-extrabold text-slate-900">1st Louisian Pickleball Tournament</h3>
-                <p className="text-sm font-semibold text-slate-500">Date: June 20–21, 2026</p>
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <div className="flex items-center gap-1 text-xs text-slate-500 font-semibold">
+                    📅 June 20–21, 2026
+                  </div>
+                  <span className="text-slate-300">•</span>
+                  <div className="text-xs font-black text-amber-900 bg-amber-50 border border-amber-250 px-2.5 py-0.5 rounded flex items-center gap-1 shadow-3xs">
+                    🎟️ ₱800 REGISTRATION FEE
+                  </div>
+                </div>
                 <p className="text-slate-600 leading-relaxed text-sm">
                   Experience the high-energy excitement of the pickleball court! Our fundraising tournament provides a recreational platform for competitive sport and community networking. All proceeds go directly to supporting primary logistics for our Grand Alumni Homecoming.
                 </p>
@@ -315,19 +323,23 @@ export default function Home({ countdown, navigateToTab }: HomeProps) {
               <div className="w-full lg:w-1/2 space-y-4">
                 <span className="text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-150 px-2.5 py-0.5 rounded uppercase tracking-wider inline-block">Featured fundraiser</span>
                 <h3 className="text-2xl font-extrabold text-slate-900">Louisian Music Fest</h3>
-                <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 font-semibold">
-                  <span className="flex items-center gap-1">📅 Saturday, June 27</span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1">📍 J-Cob’s Cosina Bar & KTV</span>
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="flex items-center gap-1 text-xs text-slate-500 font-semibold">📅 Saturday, June 27</span>
+                  <span className="text-slate-300">•</span>
+                  <span className="flex items-center gap-1 text-xs text-slate-500 font-semibold">📍 J-Cob’s Cosina Bar & KTV</span>
+                  <span className="text-slate-300">•</span>
+                  <div className="text-xs font-black text-indigo-900 bg-indigo-50 border border-indigo-250 px-2.5 py-0.5 rounded flex items-center gap-1 shadow-3xs">
+                    🎟️ ₱250 GATE FEE (Incl. 1 FREE Beer 🍺)
+                  </div>
                 </div>
-                <p className="text-slate-600 leading-relaxed text-sm">
-                  The lights go up. The amps turn on. The crowd comes alive.
+                <p className="text-slate-600 leading-relaxed text-sm whitespace-pre-line">
+                  {`One stage. Multiple bands. One unforgettable night.
 
-This June 27, SLCC MusicFest brings together talented bands, passionate music lovers, and an electric atmosphere for a night filled with unforgettable performances. 🎸🎤🎶
+Get ready for an evening of live music, great company, and the kind of energy that only happens when people come together for something they love. 🎶⚡
 
-Come for the music. Stay for the experience. Leave with memories worth replaying.
+Whether you're here to cheer for your favorite band, discover new music, or simply enjoy the atmosphere, SLCC MusicFest is the place to be on June 27.
 
-See you in front of the stage.
+Bring your friends, grab a drink, and let the music take over.`}
                 </p>
                 <div className="pt-2">
                   <button 
