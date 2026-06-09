@@ -199,6 +199,7 @@ function ActivityDetailStructure({ id }: { id: string }) {
           <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Sponsors & Special Thanks:</span>
           <div className="flex flex-wrap gap-1.5 text-[9px] text-slate-600 font-medium">
             <span className="bg-white px-2 py-0.5 rounded border border-slate-200">J-Cob’s Cosina Bar & KTV</span>
+            <span className="bg-white px-2 py-0.5 rounded border border-slate-200">Weird Emily Production</span>
             <span className="bg-white px-2 py-0.5 rounded border border-slate-200">San Miguel Beer Corporation</span>
             <span className="bg-white px-2 py-0.5 rounded border border-slate-200">Music Lab</span>
             <span className="bg-white px-2 py-0.5 rounded border border-slate-200">Dahul Engineering Services</span>
