@@ -23,33 +23,63 @@ app.get('/api/pickleball-photos', async (req, res) => {
       return res.json({ configured: false, photos: [] });
     }
     
-    // Querying 'Pickleball' folder path inside 'gallery-photos' bucket
-    const { data: files, error } = await supabase.storage.from('gallery-photos').list('Pickleball', {
+    // Querying 'Pickleball' folder path inside 'gallery-photos' bucket (robust options)
+    let folderToUse = 'Pickleball';
+    let { data: files, error } = await supabase.storage.from('gallery-photos').list('Pickleball', {
       limit: 60,
       sortBy: { column: 'name', order: 'asc' }
     });
 
-    if (error) {
-      console.warn('⚠️ Could not list files from Supabase bucket "gallery-photos" folder "Pickleball":', error.message);
-      return res.json({ configured: true, error: error.message, photos: [] });
+    // Check if empty, failed, or only contains placeholder
+    const isEmpty = !files || files.length === 0 || (files.length === 1 && files[0].name === '.emptyFolderPlaceholder');
+
+    if (error || isEmpty) {
+      console.log('⚠️ No files in "Pickleball" (titlecase) folder. Trying "pickleball" (lowercase)...');
+      const fallbackResult = await supabase.storage.from('gallery-photos').list('pickleball', {
+        limit: 60,
+        sortBy: { column: 'name', order: 'asc' }
+      });
+      
+      const isFallbackEmpty = !fallbackResult.data || fallbackResult.data.length === 0 || 
+                              (fallbackResult.data.length === 1 && fallbackResult.data[0].name === '.emptyFolderPlaceholder');
+      
+      if (!fallbackResult.error && !isFallbackEmpty) {
+        files = fallbackResult.data;
+        folderToUse = 'pickleball';
+      } else {
+        // Fallback to bucket root if folder doesn't exist
+        console.log('⚠️ No files in "pickleball" either. Listing root of "gallery-photos" bucket...');
+        const rootResult = await supabase.storage.from('gallery-photos').list('', {
+          limit: 60,
+          sortBy: { column: 'name', order: 'asc' }
+        });
+        if (!rootResult.error && rootResult.data && rootResult.data.length > 0) {
+          // Keep only files (not directories or placeholders) at the root level
+          const filesInRoot = rootResult.data.filter(f => f.id && f.name !== '.emptyFolderPlaceholder' && !f.name.startsWith('.'));
+          if (filesInRoot.length > 0) {
+            files = filesInRoot;
+            folderToUse = '';
+          }
+        }
+      }
     }
 
     if (!files || files.length === 0) {
-      return res.json({ configured: true, photos: [], message: "No photos found in folder 'Pickleball'" });
+      return res.json({ configured: true, photos: [], message: "No photos found in folder 'Pickleball', 'pickleball', or root." });
     }
 
     const photos = files
-      .filter(f => f.name !== '.emptyFolderPlaceholder' && !f.name.startsWith('.') && f.metadata)
+      .filter(f => f.name !== '.emptyFolderPlaceholder' && !f.name.startsWith('.') && f.id)
       .map((f, index) => {
-        // Construct path relative to bucket root: "Pickleball/filename.jpg"
-        const filePath = `Pickleball/${f.name}`;
+        // Construct path relative to bucket root is "Pickleball/filename.jpg" or "filename.jpg"
+        const filePath = folderToUse ? `${folderToUse}/${f.name}` : f.name;
         const { data: { publicUrl } } = supabase.storage.from('gallery-photos').getPublicUrl(filePath);
         return {
           id: `supabase-${index}`,
           album: 'Pickleball',
           url: publicUrl,
-          title: f.name.split('.')[0].replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
-          desc: 'Live action image from the organizers\' official Supabase media folder.',
+          title: '', // Hide filename completely
+          desc: '',  // Remove default description/alt-text
           isSupabase: true
         };
       });
