@@ -15,25 +15,79 @@ export default function Gallery() {
   const [slideIndex, setSlideIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(true);
 
-  // Fetch live pickleball photos from our Supabase API proxy on load
+  // Fetch live pickleball photos from our Supabase API proxy on load, with direct client-side fallback
   useEffect(() => {
+    let active = true;
     setLoadingSupabase(true);
+    
+    // First try the custom API routing proxy
     fetch('/api/pickleball-photos')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Backend index HTTP error');
+        return res.json();
+      })
       .then(data => {
+        if (!active) return;
         if (data.configured && data.photos && data.photos.length > 0) {
           setSupabasePhotos(data.photos);
           setSupabaseConfigured(true);
+          setLoadingSupabase(false);
         } else {
           setSupabaseConfigured(data.configured || false);
+          attemptDirectClientAccess();
         }
       })
       .catch(err => {
-        console.error('Error loading Supabase bucket photo updates:', err);
-      })
-      .finally(() => {
-        setLoadingSupabase(false);
+        if (!active) return;
+        console.warn('Backend API fetch failed, trying direct client-side fallback:', err);
+        attemptDirectClientAccess();
       });
+
+    async function attemptDirectClientAccess() {
+      try {
+        const url = import.meta.env.VITE_SUPABASE_URL || 'https://lzyidmxpizclizxptujn.supabase.co'; // provide their target project url if appropriate, fallback gracefully
+        const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+        
+        // If they defined anon key, let's fetch directly from the client side!
+        if (url && key && !url.includes('your-supabase-project')) {
+          const { createClient } = await import('@supabase/supabase-js');
+          const supabase = createClient(url, key);
+          
+          const { data: files, error } = await supabase.storage.from('gallery-photos').list('Pickleball', {
+            limit: 60,
+            sortBy: { column: 'name', order: 'asc' }
+          });
+          
+          if (!error && files && files.length > 0) {
+            const validFiles = files.filter(f => f.name !== '.emptyFolderPlaceholder' && !f.name.startsWith('.') && f.id);
+            const photos = validFiles.map((f, index) => {
+              const { data: { publicUrl } } = supabase.storage.from('gallery-photos').getPublicUrl(`Pickleball/${f.name}`);
+              return {
+                id: `supabase-client-${index}`,
+                album: 'Pickleball',
+                url: publicUrl,
+                title: '',
+                desc: '',
+                isSupabase: true
+              };
+            });
+            
+            if (active && photos.length > 0) {
+              setSupabasePhotos(photos);
+              setSupabaseConfigured(true);
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Client-side direct Supabase fallback list failed:', err);
+      } finally {
+        if (active) setLoadingSupabase(false);
+      }
+    }
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   // Compute actual list of photos to display based on the selected filter
@@ -71,7 +125,8 @@ export default function Gallery() {
 
   // Auto-slide side effect for the interactive slideshow
   useEffect(() => {
-    if (!autoplay || pickleballPhotos.length <= 1 || galleryFilter !== 'pickleball') return;
+    const isSlideshowVisible = galleryFilter === 'all' || galleryFilter === 'pickleball';
+    if (!autoplay || pickleballPhotos.length <= 1 || !isSlideshowVisible) return;
     const interval = setInterval(() => {
       setSlideIndex(prev => (prev + 1) % pickleballPhotos.length);
     }, 4500);
@@ -151,7 +206,7 @@ export default function Gallery() {
         </div>
 
         {/* --- DYNAMIC SLIDESHOW SECTION --- */}
-        {galleryFilter === 'pickleball' && pickleballPhotos.length > 0 && (
+        {(galleryFilter === 'all' || galleryFilter === 'pickleball') && pickleballPhotos.length > 0 && (
           <div className="mb-12 bg-slate-900 rounded-2xl overflow-hidden shadow-xl border border-slate-800">
             <div className="p-4 sm:p-6 border-b border-slate-800 bg-slate-950 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
