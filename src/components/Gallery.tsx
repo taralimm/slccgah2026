@@ -45,7 +45,7 @@ export default function Gallery() {
 
     async function attemptDirectClientAccess() {
       try {
-        const url = import.meta.env.VITE_SUPABASE_URL || 'https://lzyidmxpizclizxptujn.supabase.co'; // provide their target project url if appropriate, fallback gracefully
+        const url = import.meta.env.VITE_SUPABASE_URL || 'https://dnqtrirprghssnznyho.supabase.co'; // provide their target project url if appropriate, fallback gracefully
         const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
         
         // If they defined anon key, let's fetch directly from the client side!
@@ -304,25 +304,39 @@ export default function Gallery() {
 
         {/* --- DYNAMIC EXTERNAL FACEBOOK ALBUM CTA --- */}
         <div className="mb-10 bg-gradient-to-r from-[#0038a8] to-blue-850 rounded-2xl p-6 text-white shadow-md flex flex-col md:flex-row items-center justify-between gap-6 border-l-8 border-[#00ea8c]">
-          <div className="space-y-2 text-center md:text-left">
+          <div className="space-y-2 text-center md:text-left flex-1">
             <span className="inline-block bg-[#00ea8c] text-[#0038a8] text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full tracking-wider">
               Official Social Roll
             </span>
-            <h3 className="text-lg sm:text-xl font-bold font-display">
-              View the Complete Full Album Coverage
+            <h3 className="text-xl sm:text-2xl font-black font-display tracking-tight text-white leading-tight">
+              {galleryFilter === 'pickleball' ? 'Pickleball Tournament Photo Albums' : 'Compilation of All Pre-Homecoming Events Photos'}
             </h3>
-            <p className="text-blue-100 text-xs sm:text-sm max-w-2xl">
-              Our official action cameras captured wonderful moments across all pre-homecoming events, sports matches, and outreach initiatives. Browse the complete external alumni photo albums to relive every memory.
+            <p className="text-blue-100 text-xs sm:text-sm max-w-3xl leading-relaxed">
+              {galleryFilter === 'pickleball' 
+                ? 'Relive the smash hits, quick rallies, and fellowship matches. Check out the dedicated full photo albums for both Day 1 and Day 2 of the tournament!'
+                : 'Our official action cameras captured wonderful moments across all pre-homecoming outreach activities, sports tournaments, and community missions. Browse the snapshot compilation below. Detailed comprehensive individual albums are hosted directly on our official social streams on Facebook.'}
             </p>
           </div>
-          <a 
-            href="https://www.facebook.com/share/p/15u4Xx8TMoX/"
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="whitespace-nowrap px-6 py-3 bg-white text-[#0038a8] hover:bg-[#00ea8c] hover:text-[#0038a8] rounded-xl font-bold text-sm tracking-wide shadow transition-all duration-200 flex items-center justify-center gap-2 shrink-0 border border-white"
-          >
-            Visit Full Facebook Album <ExternalLink className="w-4 h-4" />
-          </a>
+          {galleryFilter === 'pickleball' && (
+            <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0 justify-center">
+              <a 
+                href="https://www.facebook.com/share/p/15u4Xx8TMoX/"
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="whitespace-nowrap px-5 py-3 bg-white text-[#0038a8] hover:bg-[#00ea8c] hover:text-[#0038a8] rounded-xl font-bold text-sm tracking-wide shadow hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2 border border-white"
+              >
+                View Full Day 1 Photos <ExternalLink className="w-4 h-4" />
+              </a>
+              <a 
+                href="https://www.facebook.com/permalink.php?story_fbid=pfbid0iekd2tDZpLZeqh4UzVB7Nr2t95Fk7PVbFF4uFcJGe2xjSjN77fMamEpUEbcVWMjml&id=61565521212986"
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="whitespace-nowrap px-5 py-3 bg-white text-[#0038a8] hover:bg-[#00ea8c] hover:text-[#0038a8] rounded-xl font-bold text-sm tracking-wide shadow hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2 border border-white"
+              >
+                View Full Day 2 Photos <ExternalLink className="w-4 h-4" />
+              </a>
+            </div>
+          )}
         </div>
 
         {/* Supabase loading alert indicator */}
