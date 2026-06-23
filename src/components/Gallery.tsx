@@ -88,7 +88,7 @@ export default function Gallery() {
           <span className="text-xs font-extrabold text-[#0038a8] uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full inline-block">Visual Archives</span>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-display">Photo Gallery & Album Archives</h1>
           <p className="text-slate-600 max-w-xl mx-auto text-sm sm:text-base">
-            Browse historic snapshots, prep tournaments, and community outreach milestones leading up to the Grand Homecoming.
+            Browse snapshots, prep tournaments, and community outreach milestones leading up to the Grand Homecoming.
           </p>
         </div>
 
@@ -155,11 +155,6 @@ export default function Gallery() {
                     Pickleball Tournament Carousel
                   </h2>
                 </div>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  {supabaseConfigured 
-                    ? '⚡ Live photos loaded dynamically from your gallery-photos/Pickleball Supabase folder' 
-                    : '✨ Event action shots. Sync your Supabase coordinates to connect.'}
-                </p>
               </div>
               
               {/* Autoplay togglers and Slide Indicators */}
@@ -249,7 +244,7 @@ export default function Gallery() {
               View the Complete Full Album Coverage
             </h3>
             <p className="text-blue-100 text-xs sm:text-sm max-w-2xl">
-              Our official action cameras captured hundreds of raw action sequences, player poses, and commemorative class frames during this tournament iteration. Browse them all on our official alumni timeline.
+              Our official action cameras captured wonderful moments across all pre-homecoming events, sports matches, and outreach initiatives. Browse the complete external alumni photo albums to relive every memory.
             </p>
           </div>
           <a 
