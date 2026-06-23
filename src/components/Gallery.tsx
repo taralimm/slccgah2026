@@ -62,6 +62,13 @@ export default function Gallery() {
     ...GALLERY_DATA.filter(img => img.album.toLowerCase() === 'pickleball')
   ];
 
+  // Guard slideIndex out of bounds if photo list length changes
+  useEffect(() => {
+    if (pickleballPhotos.length > 0 && slideIndex >= pickleballPhotos.length) {
+      setSlideIndex(0);
+    }
+  }, [pickleballPhotos.length, slideIndex]);
+
   // Auto-slide side effect for the interactive slideshow
   useEffect(() => {
     if (!autoplay || pickleballPhotos.length <= 1 || galleryFilter !== 'pickleball') return;
@@ -72,10 +79,12 @@ export default function Gallery() {
   }, [autoplay, pickleballPhotos.length, galleryFilter]);
 
   const handleNextSlide = () => {
+    if (pickleballPhotos.length === 0) return;
     setSlideIndex(prev => (prev + 1) % pickleballPhotos.length);
   };
 
   const handlePrevSlide = () => {
+    if (pickleballPhotos.length === 0) return;
     setSlideIndex(prev => (prev - 1 + pickleballPhotos.length) % pickleballPhotos.length);
   };
 
@@ -181,12 +190,16 @@ export default function Gallery() {
 
             {/* Main Slideshow viewport */}
             <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full bg-slate-950 flex items-center justify-center overflow-hidden group">
-              <img 
-                src={pickleballPhotos[slideIndex].url} 
-                alt="Pickleball Match Highlights"
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover transition-all duration-700 ease-in-out scale-102"
-              />
+              {pickleballPhotos[slideIndex] ? (
+                <img 
+                  src={pickleballPhotos[slideIndex].url} 
+                  alt="Pickleball Match Highlights"
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover transition-all duration-700 ease-in-out scale-102"
+                />
+              ) : (
+                <div className="text-slate-400 text-sm py-12">No image available</div>
+              )}
               
               {/* Left arrow overlay */}
               <button
@@ -205,7 +218,7 @@ export default function Gallery() {
               </button>
 
               {/* Meta Caption strip overlay - only show if there is a title or description */}
-              {(pickleballPhotos[slideIndex].title || pickleballPhotos[slideIndex].desc) && (
+              {pickleballPhotos[slideIndex] && (pickleballPhotos[slideIndex].title || pickleballPhotos[slideIndex].desc) && (
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 pt-16 flex flex-col justify-end">
                   {pickleballPhotos[slideIndex].title && (
                     <h3 className="text-white text-base sm:text-xl font-bold leading-tight">
