@@ -148,17 +148,17 @@ export default function Gallery() {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="flex h-2 w-2 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-450 opacity-75"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-[#38bdf8]"></span>
                   </span>
                   <h2 className="text-white text-lg font-bold flex items-center gap-2">
-                    Pickleball Tournament Highlights Slideshow
+                    Pickleball Tournament Carousel
                   </h2>
                 </div>
                 <p className="text-xs text-slate-400 mt-0.5">
                   {supabaseConfigured 
-                    ? '⚡ Directly fetched from your custom live Supabase Storage bucket!' 
-                    : '✨ Displaying default event action shots. Configure your Supabase bucket project credentials in the workspace to load your own live bucket folder dynamically.'}
+                    ? '⚡ Live photos loaded dynamically from your gallery-photos/Pickleball Supabase folder' 
+                    : '✨ Event action shots. Sync your Supabase coordinates to connect.'}
                 </p>
               </div>
               
@@ -170,7 +170,7 @@ export default function Gallery() {
                 >
                   {autoplay ? (
                     <>
-                      <Pause className="w-3.5 h-3.5 text-yellow-400" /> Pause Loop
+                      <Pause className="w-3.5 h-3.5 text-yellow-400" /> Pause Auto
                     </>
                   ) : (
                     <>
@@ -188,7 +188,7 @@ export default function Gallery() {
             <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full bg-slate-950 flex items-center justify-center overflow-hidden group">
               <img 
                 src={pickleballPhotos[slideIndex].url} 
-                alt={pickleballPhotos[slideIndex].title}
+                alt="Pickleball Match Highlights"
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover transition-all duration-700 ease-in-out scale-102"
               />
@@ -209,27 +209,21 @@ export default function Gallery() {
                 <ChevronRight className="w-6 h-6" />
               </button>
 
-              {/* Meta Caption strip overlay */}
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 pt-16 flex flex-col justify-end">
-                <div className="flex items-center gap-2 mb-1">
-                  {pickleballPhotos[slideIndex].isSupabase ? (
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-sky-500/20 text-sky-300 border border-sky-500/30 flex items-center gap-1">
-                      <Database className="w-2.5 h-2.5" /> Supabase Storage
-                    </span>
-                  ) : (
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-500/30 flex items-center gap-1">
-                      <Sparkles className="w-2.5 h-2.5" /> Static Commemorative
-                    </span>
+              {/* Meta Caption strip overlay - only show if there is a title or description */}
+              {(pickleballPhotos[slideIndex].title || pickleballPhotos[slideIndex].desc) && (
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 pt-16 flex flex-col justify-end">
+                  {pickleballPhotos[slideIndex].title && (
+                    <h3 className="text-white text-base sm:text-xl font-bold leading-tight">
+                      {pickleballPhotos[slideIndex].title}
+                    </h3>
                   )}
-                  <span className="text-slate-400 text-xs font-semibold">Album: Pickleball Tournament</span>
+                  {pickleballPhotos[slideIndex].desc && (
+                    <p className="text-slate-300 text-xs sm:text-sm mt-1 max-w-2xl line-clamp-2">
+                      {pickleballPhotos[slideIndex].desc}
+                    </p>
+                  )}
                 </div>
-                <h3 className="text-white text-base sm:text-xl font-bold leading-tight">
-                  {pickleballPhotos[slideIndex].title}
-                </h3>
-                <p className="text-slate-300 text-xs sm:text-sm mt-1 max-w-2xl line-clamp-2">
-                  {pickleballPhotos[slideIndex].desc}
-                </p>
-              </div>
+              )}
             </div>
 
             {/* Miniature visual indicator bar */}
@@ -270,40 +264,42 @@ export default function Gallery() {
 
         {/* Supabase loading alert indicator */}
         {loadingSupabase && (
-          <div className="mb-8 p-3 text-center bg-sky-50 text-sky-700 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 animate-pulse">
+          <div className="mb-8 p-3 text-center bg-[#0038a8]/5 text-[#0038a8] rounded-lg text-xs font-semibold flex items-center justify-center gap-2 animate-pulse">
             <Database className="w-4 h-4 animate-spin" /> Querying custom Supabase Storage bucket media files...
           </div>
         )}
 
-        {/* Masonry-style Grid content with zoom states */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {filteredGallery.map((img, idx) => (
-            <div 
-              key={img.id}
-              onClick={() => setLightboxIndex(idx)}
-              className="group relative rounded-xl overflow-hidden aspect-video sm:aspect-square bg-slate-100 shadow-sm hover:shadow-lg cursor-pointer transition-all border border-slate-250/50 hover:border-slate-300"
-            >
-              <img 
-                src={img.url} 
-                alt={img.title} 
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 flex flex-col justify-end p-5 transition-opacity duration-200">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <span className="text-[#00ea8c] text-[10px] font-extrabold uppercase tracking-widest">{img.album}</span>
-                  {img.isSupabase && (
-                    <span className="text-white bg-sky-600/70 text-[8px] font-bold px-1 py-0.5 rounded flex items-center gap-0.5 border border-sky-400">
-                      Live ☁️
-                    </span>
-                  )}
+        {/* Masonry-style Grid content with zoom states - ONLY shown for non-Pickleball filters or for static albums */}
+        {galleryFilter !== 'pickleball' && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {filteredGallery.map((img, idx) => (
+              <div 
+                key={img.id}
+                onClick={() => setLightboxIndex(idx)}
+                className="group relative rounded-xl overflow-hidden aspect-video sm:aspect-square bg-slate-100 shadow-sm hover:shadow-lg cursor-pointer transition-all border border-slate-250/50 hover:border-slate-300"
+              >
+                <img 
+                  src={img.url} 
+                  alt={img.title || "Gallery photo"} 
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 flex flex-col justify-end p-5 transition-opacity duration-200">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span className="text-[#00ea8c] text-[10px] font-extrabold uppercase tracking-widest">{img.album}</span>
+                    {img.isSupabase && (
+                      <span className="text-white bg-sky-600/70 text-[8px] font-bold px-1 py-0.5 rounded flex items-center gap-0.5 border border-sky-400">
+                        Live ☁️
+                      </span>
+                    )}
+                  </div>
+                  {img.title && <h4 className="text-white text-base font-bold leading-tight mt-0.5">{img.title}</h4>}
+                  {img.desc && <p className="text-slate-300 text-xs mt-1 line-clamp-2">{img.desc}</p>}
                 </div>
-                <h4 className="text-white text-base font-bold leading-tight mt-0.5">{img.title}</h4>
-                <p className="text-slate-300 text-xs mt-1 line-clamp-2">{img.desc}</p>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* Inline feedback if filter yields blank */}
         {filteredGallery.length === 0 && (
@@ -318,7 +314,7 @@ export default function Gallery() {
 
         {/* Lightbox Viewer modal overlay */}
         {lightboxIndex !== null && filteredGallery[lightboxIndex] && (
-          <div className="fixed inset-0 bg-slate-950/95 z-55 flex items-center justify-center p-4 transition-all">
+          <div className="fixed inset-0 bg-slate-950/95 z-55 flex items-center justify-center p-4 transition-all w-full h-full">
             
             {/* Close button */}
             <button 
@@ -333,7 +329,7 @@ export default function Gallery() {
               <div className="relative aspect-video max-h-[70vh] bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-2xl flex items-center justify-center">
                 <img 
                   src={filteredGallery[lightboxIndex].url} 
-                  alt={filteredGallery[lightboxIndex].title} 
+                  alt={filteredGallery[lightboxIndex].title || "Enlarged view"} 
                   referrerPolicy="no-referrer"
                   className="max-h-[70vh] w-auto max-w-full object-contain"
                 />
@@ -346,8 +342,8 @@ export default function Gallery() {
                     <span className="bg-sky-600/30 text-sky-300 border border-sky-500 text-[8px] px-1 py-0.5 rounded">LIVE STORAGE BUCKET</span>
                   )}
                 </span>
-                <h3 className="text-lg sm:text-xl font-bold">{filteredGallery[lightboxIndex].title}</h3>
-                <p className="text-slate-400 text-xs sm:text-sm">{filteredGallery[lightboxIndex].desc}</p>
+                {filteredGallery[lightboxIndex].title && <h3 className="text-lg sm:text-xl font-bold">{filteredGallery[lightboxIndex].title}</h3>}
+                {filteredGallery[lightboxIndex].desc && <p className="text-slate-400 text-xs sm:text-sm">{filteredGallery[lightboxIndex].desc}</p>}
               </div>
 
               {/* Left/Right switches */}
