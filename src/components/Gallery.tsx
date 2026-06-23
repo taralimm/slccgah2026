@@ -216,7 +216,7 @@ export default function Gallery() {
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-[#38bdf8]"></span>
                   </span>
                   <h2 className="text-white text-lg font-bold flex items-center gap-2">
-                    Pickleball Tournament Carousel
+                    Pickleball Tournament Photos
                   </h2>
                 </div>
               </div>
