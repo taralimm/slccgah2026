@@ -8,6 +8,7 @@ export default function Gallery() {
   
   // Supabase live photos state
   const [supabasePhotos, setSupabasePhotos] = useState<any[]>([]);
+  const [musicfestPhotos, setMusicfestPhotos] = useState<any[]>([]);
   const [supabaseConfigured, setSupabaseConfigured] = useState<boolean>(false);
   const [loadingSupabase, setLoadingSupabase] = useState<boolean>(false);
 
@@ -15,15 +16,15 @@ export default function Gallery() {
   const [slideIndex, setSlideIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(true);
 
-  // Fetch live pickleball photos from our Supabase API proxy on load, with direct client-side fallback
+  // Fetch live photos from our Supabase API proxies on load, with direct client-side fallback
   useEffect(() => {
     let active = true;
     setLoadingSupabase(true);
     
-    // First try the custom API routing proxy
-    fetch('/api/pickleball-photos')
+    // 1. Fetch Pickleball photos
+    const fetchPickleball = fetch('/api/pickleball-photos')
       .then(res => {
-        if (!res.ok) throw new Error('Backend index HTTP error');
+        if (!res.ok) throw new Error('Pickleball HTTP error');
         return res.json();
       })
       .then(data => {
@@ -31,24 +32,47 @@ export default function Gallery() {
         if (data.configured && data.photos && data.photos.length > 0) {
           setSupabasePhotos(data.photos);
           setSupabaseConfigured(true);
-          setLoadingSupabase(false);
         } else {
           setSupabaseConfigured(data.configured || false);
-          attemptDirectClientAccess();
+          return attemptDirectClientPickleball();
         }
       })
       .catch(err => {
         if (!active) return;
-        console.warn('Backend API fetch failed, trying direct client-side fallback:', err);
-        attemptDirectClientAccess();
+        console.warn('Backend Pickleball API fetch failed, trying direct client fallback:', err);
+        return attemptDirectClientPickleball();
       });
 
-    async function attemptDirectClientAccess() {
+    // 2. Fetch MusicFest photos
+    const fetchMusicFest = fetch('/api/musicfest-photos')
+      .then(res => {
+        if (!res.ok) throw new Error('MusicFest HTTP error');
+        return res.json();
+      })
+      .then(data => {
+        if (!active) return;
+        if (data.configured && data.photos && data.photos.length > 0) {
+          setMusicfestPhotos(data.photos);
+          setSupabaseConfigured(true);
+        } else {
+          return attemptDirectClientMusicFest();
+        }
+      })
+      .catch(err => {
+        if (!active) return;
+        console.warn('Backend MusicFest API fetch failed, trying direct client fallback:', err);
+        return attemptDirectClientMusicFest();
+      });
+
+    Promise.all([fetchPickleball, fetchMusicFest]).finally(() => {
+      if (active) setLoadingSupabase(false);
+    });
+
+    async function attemptDirectClientPickleball() {
       try {
-        const url = import.meta.env.VITE_SUPABASE_URL || 'https://dnqtrirprghssnznyho.supabase.co'; // provide their target project url if appropriate, fallback gracefully
+        const url = import.meta.env.VITE_SUPABASE_URL || 'https://dnqtrirprghssnznyho.supabase.co';
         const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
         
-        // If they defined anon key, let's fetch directly from the client side!
         if (url && key && !url.includes('your-supabase-project')) {
           const { createClient } = await import('@supabase/supabase-js');
           const supabase = createClient(url, key);
@@ -79,9 +103,46 @@ export default function Gallery() {
           }
         }
       } catch (err) {
-        console.warn('Client-side direct Supabase fallback list failed:', err);
-      } finally {
-        if (active) setLoadingSupabase(false);
+        console.warn('Client-side direct Supabase fallback list failed for Pickleball:', err);
+      }
+    }
+
+    async function attemptDirectClientMusicFest() {
+      try {
+        const url = import.meta.env.VITE_SUPABASE_URL || 'https://dnqtrirprghssnznyho.supabase.co';
+        const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+        
+        if (url && key && !url.includes('your-supabase-project')) {
+          const { createClient } = await import('@supabase/supabase-js');
+          const supabase = createClient(url, key);
+          
+          const { data: files, error } = await supabase.storage.from('gallery-photos').list('MusicFest', {
+            limit: 60,
+            sortBy: { column: 'name', order: 'asc' }
+          });
+          
+          if (!error && files && files.length > 0) {
+            const validFiles = files.filter(f => f.name !== '.emptyFolderPlaceholder' && !f.name.startsWith('.') && f.id);
+            const photos = validFiles.map((f, index) => {
+              const { data: { publicUrl } } = supabase.storage.from('gallery-photos').getPublicUrl(`MusicFest/${f.name}`);
+              return {
+                id: `supabase-client-music-${index}`,
+                album: 'Music Fest',
+                url: publicUrl,
+                title: '',
+                desc: '',
+                isSupabase: true
+              };
+            });
+            
+            if (active && photos.length > 0) {
+              setMusicfestPhotos(photos);
+              setSupabaseConfigured(true);
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Client-side direct Supabase fallback list failed for MusicFest:', err);
       }
     }
 
@@ -97,12 +158,15 @@ export default function Gallery() {
       ? GALLERY_DATA 
       : GALLERY_DATA.filter(img => img.album.toLowerCase().replace(/\s+/g, '') === galleryFilter.replace(/\s+/g, ''));
 
-    // 2. Gather live Supabase photos if filter corresponds to pickleball or all
+    // 2. Gather live Supabase photos if filter corresponds to pickleball, musicfest, or all
     if (galleryFilter === 'all') {
-      return [...supabasePhotos, ...staticFiltered];
+      return [...supabasePhotos, ...musicfestPhotos, ...staticFiltered];
     } else if (galleryFilter === 'pickleball') {
       const staticPickleball = GALLERY_DATA.filter(img => img.album.toLowerCase() === 'pickleball');
       return [...supabasePhotos, ...staticPickleball];
+    } else if (galleryFilter === 'musicfest') {
+      const staticMusic = GALLERY_DATA.filter(img => img.album.toLowerCase().replace(/\s+/g, '') === 'musicfest');
+      return [...musicfestPhotos, ...staticMusic];
     } else {
       return staticFiltered;
     }
@@ -110,37 +174,49 @@ export default function Gallery() {
 
   const filteredGallery = getFilteredPhotos();
 
-  // Specifically filter pickleball action photos for our gorgeous carousel/slideshow
-  const pickleballPhotos = [
-    ...supabasePhotos,
-    ...GALLERY_DATA.filter(img => img.album.toLowerCase() === 'pickleball')
-  ];
+  // Determine which photos go into the active carousel
+  const activeCarouselPhotos = galleryFilter === 'pickleball'
+    ? [
+        ...supabasePhotos,
+        ...GALLERY_DATA.filter(img => img.album.toLowerCase() === 'pickleball')
+      ]
+    : galleryFilter === 'musicfest'
+    ? [
+        ...musicfestPhotos,
+        ...GALLERY_DATA.filter(img => img.album.toLowerCase().replace(/\s+/g, '') === 'musicfest')
+      ]
+    : [];
+
+  // Reset slide index when gallery filter changes to avoid out of bounds or sudden jumps
+  useEffect(() => {
+    setSlideIndex(0);
+  }, [galleryFilter]);
 
   // Guard slideIndex out of bounds if photo list length changes
   useEffect(() => {
-    if (pickleballPhotos.length > 0 && slideIndex >= pickleballPhotos.length) {
+    if (activeCarouselPhotos.length > 0 && slideIndex >= activeCarouselPhotos.length) {
       setSlideIndex(0);
     }
-  }, [pickleballPhotos.length, slideIndex]);
+  }, [activeCarouselPhotos.length, slideIndex]);
 
   // Auto-slide side effect for the interactive slideshow
   useEffect(() => {
-    const isSlideshowVisible = galleryFilter === 'all' || galleryFilter === 'pickleball';
-    if (!autoplay || pickleballPhotos.length <= 1 || !isSlideshowVisible) return;
+    const isSlideshowVisible = galleryFilter === 'pickleball' || galleryFilter === 'musicfest';
+    if (!autoplay || activeCarouselPhotos.length <= 1 || !isSlideshowVisible) return;
     const interval = setInterval(() => {
-      setSlideIndex(prev => (prev + 1) % pickleballPhotos.length);
+      setSlideIndex(prev => (prev + 1) % activeCarouselPhotos.length);
     }, 4500);
     return () => clearInterval(interval);
-  }, [autoplay, pickleballPhotos.length, galleryFilter]);
+  }, [autoplay, activeCarouselPhotos.length, galleryFilter]);
 
   const handleNextSlide = () => {
-    if (pickleballPhotos.length === 0) return;
-    setSlideIndex(prev => (prev + 1) % pickleballPhotos.length);
+    if (activeCarouselPhotos.length === 0) return;
+    setSlideIndex(prev => (prev + 1) % activeCarouselPhotos.length);
   };
 
   const handlePrevSlide = () => {
-    if (pickleballPhotos.length === 0) return;
-    setSlideIndex(prev => (prev - 1 + pickleballPhotos.length) % pickleballPhotos.length);
+    if (activeCarouselPhotos.length === 0) return;
+    setSlideIndex(prev => (prev - 1 + activeCarouselPhotos.length) % activeCarouselPhotos.length);
   };
 
   return (
@@ -174,7 +250,10 @@ export default function Gallery() {
             🏓 Pickleball Tournament
           </button>
           <button 
-            onClick={() => setGalleryFilter('musicfest')}
+            onClick={() => {
+              setGalleryFilter('musicfest');
+              setSlideIndex(0);
+            }}
             className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 ${galleryFilter === 'musicfest' ? 'bg-[#0038a8] text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-250'}`}
           >
             🎸 Louisian Music Fest
@@ -206,7 +285,7 @@ export default function Gallery() {
         </div>
 
         {/* --- DYNAMIC SLIDESHOW SECTION --- */}
-        {(galleryFilter === 'all' || galleryFilter === 'pickleball') && pickleballPhotos.length > 0 && (
+        {(galleryFilter === 'pickleball' || galleryFilter === 'musicfest') && activeCarouselPhotos.length > 0 && (
           <div className="mb-12 bg-slate-900 rounded-2xl overflow-hidden shadow-xl border border-slate-800">
             <div className="p-4 sm:p-6 border-b border-slate-800 bg-slate-950 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
@@ -216,7 +295,7 @@ export default function Gallery() {
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-[#38bdf8]"></span>
                   </span>
                   <h2 className="text-white text-lg font-bold flex items-center gap-2">
-                    Pickleball Tournament Photos
+                    {galleryFilter === 'pickleball' ? 'Pickleball Tournament Carousel' : 'Louisian Music Fest Carousel'}
                   </h2>
                 </div>
               </div>
@@ -238,17 +317,17 @@ export default function Gallery() {
                   )}
                 </button>
                 <div className="text-xs text-slate-400 font-mono bg-slate-950 px-2.5 py-1.5 rounded border border-slate-800">
-                  {slideIndex + 1} / {pickleballPhotos.length}
+                  {slideIndex + 1} / {activeCarouselPhotos.length}
                 </div>
               </div>
             </div>
 
             {/* Main Slideshow viewport */}
             <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full bg-slate-950 flex items-center justify-center overflow-hidden group">
-              {pickleballPhotos[slideIndex] ? (
+              {activeCarouselPhotos[slideIndex] ? (
                 <img 
-                  src={pickleballPhotos[slideIndex].url} 
-                  alt="Pickleball Match Highlights"
+                  src={activeCarouselPhotos[slideIndex].url} 
+                  alt={galleryFilter === 'pickleball' ? 'Pickleball Match Highlights' : 'Music Fest Highlights'}
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover transition-all duration-700 ease-in-out scale-102"
                 />
@@ -273,16 +352,16 @@ export default function Gallery() {
               </button>
 
               {/* Meta Caption strip overlay - only show if there is a title or description */}
-              {pickleballPhotos[slideIndex] && (pickleballPhotos[slideIndex].title || pickleballPhotos[slideIndex].desc) && (
+              {activeCarouselPhotos[slideIndex] && (activeCarouselPhotos[slideIndex].title || activeCarouselPhotos[slideIndex].desc) && (
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 pt-16 flex flex-col justify-end">
-                  {pickleballPhotos[slideIndex].title && (
+                  {activeCarouselPhotos[slideIndex].title && (
                     <h3 className="text-white text-base sm:text-xl font-bold leading-tight">
-                      {pickleballPhotos[slideIndex].title}
+                      {activeCarouselPhotos[slideIndex].title}
                     </h3>
                   )}
-                  {pickleballPhotos[slideIndex].desc && (
+                  {activeCarouselPhotos[slideIndex].desc && (
                     <p className="text-slate-300 text-xs sm:text-sm mt-1 max-w-2xl line-clamp-2">
-                      {pickleballPhotos[slideIndex].desc}
+                      {activeCarouselPhotos[slideIndex].desc}
                     </p>
                   )}
                 </div>
@@ -291,7 +370,7 @@ export default function Gallery() {
 
             {/* Miniature visual indicator bar */}
             <div className="flex items-center justify-center gap-1.5 p-3 bg-slate-950 border-t border-slate-900">
-              {pickleballPhotos.map((_, idx) => (
+              {activeCarouselPhotos.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSlideIndex(idx)}
@@ -346,8 +425,8 @@ export default function Gallery() {
           </div>
         )}
 
-        {/* Masonry-style Grid content with zoom states - ONLY shown for non-Pickleball filters or for static albums */}
-        {galleryFilter !== 'pickleball' && (
+        {/* Masonry-style Grid content with zoom states - ONLY shown for non-carousel filters or for static albums */}
+        {galleryFilter !== 'pickleball' && galleryFilter !== 'musicfest' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {filteredGallery.map((img, idx) => (
               <div 
