@@ -10,6 +10,33 @@ export default function Home({ countdown, navigateToTab }: HomeProps) {
   return (
     <div>
       
+      {/* Promo Announcement Banner */}
+      <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-indigo-800 text-white shadow-md border-b border-indigo-900 animate-fadeIn">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+          <div className="flex flex-col sm:flex-row items-center gap-3">
+            <span className="text-3xl animate-bounce">📢</span>
+            <div>
+              <span className="inline-block px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 font-extrabold text-[10px] uppercase tracking-wider mb-1 sm:mb-0 sm:mr-2">
+                Special Registration Promo
+              </span>
+              <p className="text-sm sm:text-base font-semibold">
+                Starting today, <span className="font-extrabold text-amber-300 underline">July 8 up to July 26</span>, registration fee is dropped to <span className="font-extrabold text-amber-300 text-lg">PHP 450</span>. Starting July 27, price will go back to PHP 500.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <a 
+              href="https://form.jotform.com/260768214727059"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-amber-400 hover:bg-amber-300 text-slate-950 px-5 py-2 rounded-full font-black text-xs sm:text-sm uppercase tracking-wider shadow-sm transition-all duration-200"
+            >
+              Secure Spot (PHP 450)
+            </a>
+          </div>
+        </div>
+      </div>
+      
       {/* HER0 AREA WITH RETRO TEXT AND countdown */}
       <section className="relative gradient-bg-hero grid-overlay overflow-hidden py-16 sm:py-24 lg:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
