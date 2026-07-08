@@ -411,9 +411,7 @@ export default function Faqs() {
 
             {/* Right side BPI QR Mock */}
             <div className="md:col-span-5 flex flex-col items-center justify-center">
-              <div className="bg-[#dc2626] text-white p-6 rounded-3xl shadow-xl w-full max-w-[300px] flex flex-col items-center border border-red-500">
-                <span className="text-white font-black tracking-widest text-2xl font-display mb-0.5">BPI</span>
-                <span className="text-[10px] text-red-100 font-bold uppercase tracking-widest mb-4">batch2001</span>
+              <div className="bg-[#dc2626] p-5 rounded-3xl shadow-xl w-full max-w-[300px] flex flex-col items-center border border-red-500">
                 
                 {/* Real high-quality BPI InstaPay QR Code image */}
                 <div className="bg-white p-4 rounded-2xl w-full aspect-square flex items-center justify-center relative overflow-hidden group/qr shadow-inner">
