@@ -34,6 +34,7 @@ import Home from './components/Home.js';
 import Activities from './components/Activities.js';
 import Gallery from './components/Gallery.js';
 import Contact from './components/Contact.js';
+import Faqs from './components/Faqs.js';
 
 export default function App() {
   // Helper to get tab from pathname or hash on load
@@ -42,7 +43,7 @@ export default function App() {
     
     // Check hash first
     const hash = window.location.hash.replace(/^#\//, '').replace(/^#/, '').toLowerCase();
-    if (['activities', 'gallery', 'contact', 'admin'].includes(hash)) {
+    if (['activities', 'gallery', 'contact', 'admin', 'faqs'].includes(hash)) {
       return hash as any;
     }
 
@@ -52,15 +53,15 @@ export default function App() {
       window.location.href = 'https://form.jotform.com/260768214727059';
       return 'home';
     }
-    if (['activities', 'gallery', 'contact', 'admin'].includes(path)) {
+    if (['activities', 'gallery', 'contact', 'admin', 'faqs'].includes(path)) {
       return path as any;
     }
     return 'home';
   };
 
-  const [currentTab, setCurrentTab] = useState<'home' | 'activities' | 'gallery' | 'contact' | 'register' | 'admin'>(getInitialTab());
+  const [currentTab, setCurrentTab] = useState<'home' | 'activities' | 'gallery' | 'contact' | 'register' | 'admin' | 'faqs'>(getInitialTab());
 
-  const navigateToTab = (tab: 'home' | 'activities' | 'gallery' | 'contact' | 'register' | 'admin') => {
+  const navigateToTab = (tab: 'home' | 'activities' | 'gallery' | 'contact' | 'register' | 'admin' | 'faqs') => {
     if (tab === 'register') {
       window.open('https://form.jotform.com/260768214727059', '_blank', 'noopener,noreferrer');
       return;
@@ -488,6 +489,12 @@ export default function App() {
                 Gallery
               </button>
               <button 
+                onClick={() => navigateToTab('faqs')}
+                className={`text-sm font-semibold transition-colors ${currentTab === 'faqs' ? 'text-[#0038a8]' : 'text-slate-600 hover:text-slate-900'}`}
+              >
+                FAQs
+              </button>
+              <button 
                 onClick={() => navigateToTab('contact')}
                 className={`text-sm font-semibold transition-colors ${currentTab === 'contact' ? 'text-[#0038a8]' : 'text-slate-600 hover:text-slate-900'}`}
               >
@@ -539,6 +546,12 @@ export default function App() {
               Gallery
             </button>
             <button 
+              onClick={() => { navigateToTab('faqs'); setMobileMenuOpen(false); }}
+              className={`text-left px-3 py-2.5 rounded-lg text-base font-semibold ${currentTab === 'faqs' ? 'bg-[#0038a8]/5 text-[#0038a8]' : 'text-slate-700'}`}
+            >
+              FAQs
+            </button>
+            <button 
               onClick={() => { navigateToTab('contact'); setMobileMenuOpen(false); }}
               className={`text-left px-3 py-2.5 rounded-lg text-base font-semibold ${currentTab === 'contact' ? 'bg-[#0038a8]/5 text-[#0038a8]' : 'text-slate-700'}`}
             >
@@ -579,385 +592,117 @@ export default function App() {
         )}
 
 
+        {/* ================= FAQS TAB VIEW ================= */}
+        {currentTab === 'faqs' && (
+          <Faqs />
+        )}
+
+
         {/* ================= REGISTRATION FOR HOMECOMING TAB ================= */}
         {currentTab === 'register' && (
-          <div className="py-12 sm:py-16 bg-[#f8fafc] grid-overlay">
+          <div className="py-12 sm:py-20 bg-[#f8fafc] grid-overlay">
             <div className="max-w-3xl mx-auto px-4 sm:px-6">
-
-              {/* Success Page overlay if just registered */}
-              {justRegistered ? (
-                <div className="glass-card bg-white rounded-3xl p-8 sm:p-12 text-center space-y-8 animate-fadeIn border border-slate-200 shadow-2xl">
-                  <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto text-green-600 shadow-sm">
-                    <CheckCircle2 className="w-12 h-12" />
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <h1 className="text-3xl font-extrabold text-slate-900 font-display">🎉 Registration Received! 🎉</h1>
-                    <p className="text-[#0038a8] font-bold text-sm tracking-wide">
-                      YOUR SYSTEM REGISTRATION CODE: {finalRefId}
-                    </p>
-                    <div className="w-16 h-1 bg-[#0038a8] mx-auto rounded-full"></div>
-                  </div>
-
-                  <p className="text-slate-600 text-base leading-relaxed max-w-lg mx-auto">
-                    Get ready to throw it back to the dopest decade! Think iconic music, epic throwback fits, and a night full of unforgettable reunions. Your uploaded proof of payment is now under review by our admin operations team.
+              
+              <div className="space-y-8 text-center">
+                <div className="space-y-3">
+                  <span className="text-xs font-bold text-[#0038a8] uppercase tracking-wider block">REUNION RSVP</span>
+                  <h1 className="text-4xl sm:text-5xl font-extrabold text-[#0038a8] font-display">SLCC GAH 2026 Registration</h1>
+                  <p className="text-slate-600 text-sm max-w-xl mx-auto">
+                    The registration, ticketing, and verification process is handled directly through our official secure third-party partner form.
                   </p>
-
-                  <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 max-w-md mx-auto text-left space-y-2 text-sm">
-                    <p className="font-bold text-slate-800">What happens next?</p>
-                    <p className="text-slate-600">1. Verification: We will manual-verify your submitted GCash reference index.</p>
-                    <p className="text-slate-600">2. Confirmation Email: You will receive an official confirmation PDF ticket once verified.</p>
-                    <p className="text-slate-600">3. Bring Ticket: Keep your Reference ID handy on August 1st.</p>
-                  </div>
-
-                  <div className="pt-4 flex flex-col sm:flex-row justify-center items-center gap-3">
-                    <button 
-                      onClick={() => { setJustRegistered(false); setFinalRefId(''); }}
-                      className="px-6 py-3 border border-slate-200 hover:border-slate-300 text-slate-700 font-bold rounded-full text-sm"
-                    >
-                      New Submission
-                    </button>
-                    <button 
-                      onClick={() => navigateToTab('home')}
-                      className="px-6 py-3 bg-[#0038a8] hover:bg-[#002e8c] text-white font-bold rounded-full text-sm shadow-md"
-                    >
-                      Back to Homepage
-                    </button>
-                  </div>
                 </div>
-              ) : (
-                <div className="space-y-8">
-                  
-                  <div className="text-center space-y-3">
-                    <span className="text-xs font-bold text-[#0038a8] uppercase tracking-wider block">REUNION RSVP FORM</span>
-                    <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-display">SLCC GAH 2026 Online Registration</h1>
-                    <p className="text-slate-600 text-sm max-w-xl mx-auto">This registration is exclusively for the August 1, 2026 Grand Alumni Homecoming Reunion event. Fee is ₱500.00 pesos per participant.</p>
+
+                {/* Branded Info Grid */}
+                <div className="glass-card bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-xl text-left space-y-8">
+                  <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                    <span className="text-2xl">🎫</span>
+                    <div>
+                      <h3 className="text-lg font-bold text-[#0038a8] uppercase tracking-tight">Homecoming Ticket Rates</h3>
+                      <p className="text-xs text-slate-500">Fast, streamlined online confirmation</p>
+                    </div>
                   </div>
 
-                  {/* Form Component Container */}
-                  <form onSubmit={handleRegistrationSubmit} className="glass-card bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-xl space-y-10">
-                    
-                    {/* PRIMARY REGISTRANT INFO BLOCK */}
-                    <div className="space-y-6">
-                      <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                        <div className="w-8 h-8 rounded bg-[#0038a8]/10 text-[#0038a8] flex items-center justify-center font-bold text-sm">P1</div>
-                        <h3 className="text-lg font-bold text-slate-900 uppercase tracking-tight">Main Registrant Information (Required)</h3>
+                  {/* Promo Alert Banner inside Rates Card */}
+                  <div className="p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-start gap-3 text-slate-800 animate-fadeIn">
+                    <span className="text-xl">🎉</span>
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-xs sm:text-sm uppercase tracking-wider">Flash Promo Activated!</h4>
+                      <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                        Starting today, July 8 up to July 26, registration will be dropped to <strong>PHP 450</strong> (PHP 900 for tickets with companion). Starting July 27, price will go back to PHP 500.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="p-5 bg-gradient-to-br from-indigo-50/40 to-slate-50 rounded-2xl border border-indigo-100 relative overflow-hidden space-y-2">
+                      <div className="absolute top-0 right-0 bg-amber-400 text-slate-950 px-2.5 py-0.5 text-[9px] font-black uppercase tracking-wider rounded-bl-lg">
+                        Promo July 8-26
                       </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        
-                        <div className="space-y-1">
-                          <label className="text-xs font-bold text-slate-700 block">First Name <span className="text-rose-500">*</span></label>
-                          <input 
-                            required
-                            type="text" 
-                            value={regForm.firstName}
-                            onChange={(e) => setRegForm({...regForm, firstName: e.target.value})}
-                            placeholder="e.g. Cheryll" 
-                            className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-[#0038a8] focus:outline-none text-slate-800 text-sm transition-colors"
-                          />
-                        </div>
-
-                        <div className="space-y-1">
-                          <label className="text-xs font-bold text-slate-700 block">Last Name <span className="text-rose-500">*</span></label>
-                          <input 
-                            required
-                            type="text" 
-                            value={regForm.lastName}
-                            onChange={(e) => setRegForm({...regForm, lastName: e.target.value})}
-                            placeholder="e.g. Pino" 
-                            className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-[#0038a8] focus:outline-none text-slate-800 text-sm transition-colors"
-                          />
-                        </div>
-
-                        <div className="space-y-1">
-                          <label className="text-xs font-bold text-slate-700 block">Email Address <span className="text-rose-500">*</span></label>
-                          <input 
-                            required
-                            type="email" 
-                            value={regForm.email}
-                            onChange={(e) => setRegForm({...regForm, email: e.target.value})}
-                            placeholder="e.g. cheryll@example.com" 
-                            className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-[#0038a8] focus:outline-none text-slate-800 text-sm transition-colors"
-                          />
-                        </div>
-
-                        <div className="space-y-1">
-                          <label className="text-xs font-bold text-slate-700 block">Phone Number <span className="text-rose-500">*</span></label>
-                          <input 
-                            required
-                            type="tel" 
-                            value={regForm.phone}
-                            onChange={(e) => setRegForm({...regForm, phone: e.target.value})}
-                            placeholder="e.g. 0917 123 4567" 
-                            className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-[#0038a8] focus:outline-none text-slate-800 text-sm transition-colors"
-                          />
-                        </div>
-
-                        <div className="sm:col-span-2 space-y-1">
-                          <label className="text-xs font-bold text-slate-700 block">Address / City (Include Province if outside Cebu)</label>
-                          <input 
-                            type="text" 
-                            value={regForm.address}
-                            onChange={(e) => setRegForm({...regForm, address: e.target.value})}
-                            placeholder="e.g. Danao, Cebu" 
-                            className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-[#0038a8] focus:outline-none text-slate-800 text-sm transition-colors"
-                          />
-                        </div>
-
-                        <div className="sm:col-span-2 space-y-1">
-                          <label className="text-xs font-bold text-slate-700 block">Batch Year <span className="text-rose-500">*</span></label>
-                          <select 
-                            value={regForm.batchYear}
-                            onChange={(e) => setRegForm({...regForm, batchYear: e.target.value})}
-                            className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-[#0038a8] focus:outline-none text-slate-800 text-sm bg-white"
-                          >
-                            {batchYears.map(year => (
-                              <option key={year} value={year}>Class of {year}</option>
-                            ))}
-                          </select>
-                        </div>
-
-                      </div>
+                      <span className="text-xs font-bold text-slate-500 uppercase tracking-widest block">Standard Ticket</span>
+                      <p className="text-3xl font-black text-slate-900">₱450.00 <span className="text-xs font-bold text-slate-400 line-through">₱500</span> <span className="text-xs font-normal text-slate-500">/ pax</span></p>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        Covers entry, food, nostalgic souvenirs, commemorative items, and entry into the raffle draw. Price returns to ₱500 starting July 27.
+                      </p>
                     </div>
 
-                    {/* INTERACTIVE TOGGLE TO REGISTER COMPANION */}
-                    <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                      <div>
-                        <h4 className="font-bold text-slate-900 text-base">Register With Companion?</h4>
-                        <p className="text-xs text-slate-500">Enable this to register one extra companion for additional ₱500.00 fee.</p>
+                    <div className="p-5 bg-gradient-to-br from-indigo-50/40 to-slate-50 rounded-2xl border border-indigo-100 relative overflow-hidden space-y-2">
+                      <div className="absolute top-0 right-0 bg-amber-400 text-slate-950 px-2.5 py-0.5 text-[9px] font-black uppercase tracking-wider rounded-bl-lg">
+                        Promo July 8-26
                       </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input 
-                          type="checkbox" 
-                          checked={regForm.hasCompanion}
-                          onChange={(e) => setRegForm({...regForm, hasCompanion: e.target.checked})}
-                          className="sr-only peer"
-                        />
-                        <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0038a8]"></div>
-                      </label>
+                      <span className="text-xs font-bold text-slate-500 uppercase tracking-widest block">With Companion</span>
+                      <p className="text-3xl font-black text-slate-900">₱900.00 <span className="text-xs font-bold text-slate-400 line-through">₱1,000</span> <span className="text-xs font-normal text-slate-500">/ 2 pax</span></p>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        Add one extra batchmate, partner, or companion to join the throwback bash. Price returns to ₱1,000 starting July 27.
+                      </p>
                     </div>
+                  </div>
 
-                    {/* COMPANION BLOCK Conditional display if turned on */}
-                    {regForm.hasCompanion && (
-                      <div className="space-y-6 pt-4 border-t border-slate-100 animate-fadeIn">
-                        
-                        <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                          <div className="w-8 h-8 rounded bg-[#00ea8c]/10 text-emerald-800 flex items-center justify-center font-bold text-sm">P2</div>
-                          <h3 className="text-lg font-bold text-slate-900 uppercase tracking-tight">Companion Information</h3>
-                        </div>
+                  {/* Important Notes */}
+                  <div className="p-4 sm:p-5 bg-[#0038a8]/5 border border-[#0038a8]/10 rounded-2xl space-y-3">
+                    <h4 className="font-bold text-[#0038a8] text-sm flex items-center gap-2">
+                      💡 Simple Instructions
+                    </h4>
+                    <ul className="text-xs sm:text-sm text-slate-700 space-y-2 pl-1 leading-relaxed">
+                      <li className="flex items-start gap-2">
+                        <span className="text-[#0038a8] font-bold">1.</span>
+                        Click the secure button below to launch our official external <strong>JotForm</strong> RSVP page.
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-[#0038a8] font-bold">2.</span>
+                        Fill out your personal information and select your batch year class.
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-[#0038a8] font-bold">3.</span>
+                        Provide payment confirmation to secure and lock in your reunion seats instantly!
+                      </li>
+                    </ul>
+                  </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                          
-                          <div className="space-y-1">
-                            <label className="text-xs font-bold text-slate-700 block">First Name <span className="text-rose-500">*</span></label>
-                            <input 
-                              required={regForm.hasCompanion}
-                              type="text" 
-                              value={regForm.companionFirstName}
-                              onChange={(e) => setRegForm({...regForm, companionFirstName: e.target.value})}
-                              placeholder="Companion's First Name" 
-                              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-[#0038a8] focus:outline-none text-slate-800 text-sm"
-                            />
-                          </div>
-
-                          <div className="space-y-1">
-                            <label className="text-xs font-bold text-slate-700 block">Last Name <span className="text-rose-500">*</span></label>
-                            <input 
-                              required={regForm.hasCompanion}
-                              type="text" 
-                              value={regForm.companionLastName}
-                              onChange={(e) => setRegForm({...regForm, companionLastName: e.target.value})}
-                              placeholder="Companion's Last Name" 
-                              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-[#0038a8] focus:outline-none text-slate-800 text-sm"
-                            />
-                          </div>
-
-                          <div className="space-y-1">
-                            <label className="text-xs font-bold text-[#0038a8] block">Email Address (Optional)</label>
-                            <input 
-                              type="email" 
-                              value={regForm.companionEmail}
-                              onChange={(e) => setRegForm({...regForm, companionEmail: e.target.value})}
-                              placeholder="Companion's Email Address" 
-                              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-[#0038a8] focus:outline-none text-slate-800 text-sm"
-                            />
-                          </div>
-
-                          <div className="space-y-1">
-                            <label className="text-xs font-bold text-[#0038a8] block">Phone Number (Optional)</label>
-                            <input 
-                              type="tel" 
-                              value={regForm.companionPhone}
-                              onChange={(e) => setRegForm({...regForm, companionPhone: e.target.value})}
-                              placeholder="Companion's Contact Number" 
-                              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-[#0038a8] focus:outline-none text-slate-800 text-sm"
-                            />
-                          </div>
-
-                          <div className="sm:col-span-2 space-y-1">
-                            <label className="text-xs font-bold text-[#0038a8] block">Address / City (Optional)</label>
-                            <input 
-                              type="text" 
-                              value={regForm.companionAddress}
-                              onChange={(e) => setRegForm({...regForm, companionAddress: e.target.value})}
-                              placeholder="Companion's Location" 
-                              className="w-full px-4 py-3 rounded-lg border border-slate-200"
-                            />
-                          </div>
-
-                          <div className="sm:col-span-2 space-y-1">
-                            <label className="text-xs font-bold text-slate-700 block">Batch Year <span className="text-rose-500">*</span></label>
-                            <select 
-                              value={regForm.companionBatchYear}
-                              onChange={(e) => setRegForm({...regForm, companionBatchYear: e.target.value})}
-                              className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-white text-sm"
-                            >
-                              {batchYears.map(year => (
-                                <option key={year} value={year}>Class of {year}</option>
-                              ))}
-                            </select>
-                          </div>
-
-                        </div>
-                      </div>
-                    )}
-
-
-                    {/* PAYMENT DETAILS AND INSTRUCTIONS PANEL */}
-                    <div className="pt-8 border-t border-slate-100 space-y-6">
-                      
-                      <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                        <span className="text-lg">💳</span>
-                        <h3 className="text-lg font-bold text-slate-900 uppercase">Payment Details</h3>
-                      </div>
-
-                      <div className="bg-slate-50 border border-slate-100 p-5 rounded-2xl md:p-6 space-y-6">
-                        
-                        <p className="text-slate-700 text-sm leading-relaxed">
-                          To confirm your registration for <strong>SLCC GAH 2026: 90’s Bash</strong>, please complete your payment of <strong>₱500.00</strong> per registrant (₱1,000.00 if registered with companion) using one of the quick options below:
-                        </p>
-
-                        <div className="grid md:grid-cols-2 gap-5 pt-2">
-                          
-                          {/* Option 1: GCash */}
-                          <div className="bg-white p-4 border border-slate-100 rounded-xl flex flex-col justify-between">
-                            <div className="space-y-2">
-                              <span className="font-bold text-sm text-[#0038a8] block">Option 1: GCash (Bank Transfer) 📱</span>
-                              <div className="h-px bg-slate-100"></div>
-                              <p className="text-xs text-slate-500">1. Open GCash app & tap "Bank Transfer"</p>
-                              <p className="text-xs text-slate-500">2. Select the bank option</p>
-                              <p className="text-xs text-slate-500">3. Details below:</p>
-                              <div className="bg-[#f0f9ff] p-2 rounded text-xs leading-5">
-                                <p><strong>Account Name:</strong> Cheryll Quejano Pino</p>
-                                <p><strong>Account Number:</strong> 0259 3363 56</p>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Option 2: Bank Transfer */}
-                          <div className="bg-white p-4 border border-slate-100 rounded-xl flex flex-col justify-between">
-                            <div className="space-y-2">
-                              <span className="font-bold text-sm text-[#0038a8] block">Option 2: Direct Bank Transfer 🏦</span>
-                              <div className="h-px bg-slate-100"></div>
-                              <p className="text-xs text-slate-500">1. Open your Mobile Bank or Visit a branch</p>
-                              <p className="text-xs text-slate-500">2. Transfer the fee to the details below:</p>
-                              <div className="bg-[#f0f9ff] p-2 rounded text-xs leading-5">
-                                <p><strong>Account Name:</strong> Cheryll Quejano Pino</p>
-                                <p><strong>Account Number:</strong> 0259 3363 56</p>
-                              </div>
-                            </div>
-                          </div>
-
-                        </div>
-
-                        <div className="p-3 bg-amber-50 border border-amber-100 rounded-xl text-xs text-amber-800 leading-relaxed">
-                          ⚠️ <strong>Security Disclaimer:</strong> If the transaction is processed under a different name, please write the registrant's full name directly on the receipt screenshot or image before uploading. All payments undergo strict verification records.
-                        </div>
-
-                      </div>
-
-                      {/* Payment inputs fields */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        
-                        {/* Reference ID input */}
-                        <div className="space-y-1">
-                          <label className="text-xs font-bold text-slate-700 block">GCash / Bank Reference ID <span className="text-rose-500">*</span></label>
-                          <input 
-                            required
-                            type="text" 
-                            value={regForm.referenceId}
-                            onChange={(e) => setRegForm({...regForm, referenceId: e.target.value})}
-                            placeholder="Reference Number for verification" 
-                            className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-[#0038a8] focus:outline-none text-slate-800 text-sm"
-                          />
-                          <p className="text-[10px] text-slate-500">Enter the unique transaction Reference ID string from GCash screen.</p>
-                        </div>
-
-                        {/* File upload drag point */}
-                        <div className="space-y-1">
-                          <label className="text-xs font-bold text-slate-700 block">Upload Payment Proof (JPG, PNG, PDF) <span className="text-rose-500">*</span></label>
-                          <div className="relative border-2 border-dashed border-slate-200 rounded-lg p-4 text-center hover:border-[#0038a8] transition-colors relative">
-                            <input 
-                              type="file" 
-                              onChange={handleFileUpload}
-                              accept=".jpg,.jpeg,.png,.pdf"
-                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                            />
-                            <div className="space-y-1 text-slate-500">
-                              <Upload className="w-5 h-5 mx-auto text-slate-400" />
-                              <p className="text-xs font-bold text-slate-700">Click to upload receipt</p>
-                              <p className="text-[10px]">Limits: PNG, JPG, PDF up to 8MB</p>
-                            </div>
-                          </div>
-                          {proofFile && (
-                            <p className="text-[10px] text-green-600 font-bold block mt-1">
-                              📎 Connected: {proofFile.name}
-                            </p>
-                          )}
-                        </div>
-
-                      </div>
-
-                    </div>
-
-                    {/* ADITIONAL INQUIRY NOTES OR COMMENTARY */}
-                    <div className="pt-8 border-t border-slate-100 space-y-2">
-                      <label className="text-xs font-bold text-slate-700 block">Optional Remarks / Food Preference Coords</label>
-                      <textarea 
-                        value={regForm.remarks}
-                        onChange={(e) => setRegForm({...regForm, remarks: e.target.value})}
-                        rows={3}
-                        placeholder="Type any remarks or specific note to the reunion organizers (e.g., food preferences, dietary constraints, seat grouping desires)"
-                        className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-[#0038a8]"
-                      />
-                    </div>
-
-                    {/* SUBMIT TRIGGERS BUTTON */}
-                    <div className="pt-6">
-                      <button 
-                        type="submit"
-                        disabled={isSubmittingReg}
-                        className="w-full text-center blue-glow-btn text-white py-4 rounded-full text-base font-bold flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-                      >
-                        {isSubmittingReg ? (
-                          <>
-                            <RefreshCw className="w-5 h-5 animate-spin" />
-                            Uploading Proof and Submitting Registration...
-                          </>
-                        ) : (
-                          <>
-                            Submit Homecoming Registration
-                            <Check className="w-5 h-5" />
-                          </>
-                        )}
-                      </button>
-                    </div>
-
-                  </form>
+                  {/* Big Beautiful Call-to-action button */}
+                  <div className="pt-4">
+                    <a 
+                      href="https://form.jotform.com/260768214727059"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full text-center py-4 bg-[#0038a8] hover:bg-[#002e8c] text-white font-black rounded-full text-lg shadow-lg flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 hover:scale-[1.01]"
+                    >
+                      <span>Open Official RSVP Form</span>
+                      <ExternalLink className="w-5 h-5" />
+                    </a>
+                  </div>
 
                 </div>
-              )}
+
+                <div className="pt-4">
+                  <button
+                    onClick={() => navigateToTab('home')}
+                    className="px-6 py-3 border border-slate-300 hover:border-slate-400 text-slate-600 hover:text-slate-800 font-bold rounded-full text-sm transition-colors"
+                  >
+                    ← Back to Homepage
+                  </button>
+                </div>
+
+              </div>
 
             </div>
           </div>
@@ -1435,6 +1180,7 @@ export default function App() {
                 <li><button onClick={() => navigateToTab('home')} className="hover:text-white transition-colors">Home Landing</button></li>
                 <li><button onClick={() => navigateToTab('activities')} className="hover:text-white transition-colors">Calendar of Activities</button></li>
                 <li><button onClick={() => navigateToTab('gallery')} className="hover:text-white transition-colors">Visual Archives Gallery</button></li>
+                <li><button onClick={() => navigateToTab('faqs')} className="hover:text-white transition-colors">Frequently Asked Questions (FAQs)</button></li>
                 <li><button onClick={() => navigateToTab('contact')} className="hover:text-white transition-colors">Contact Committee</button></li>
                 <li><a href="https://form.jotform.com/260768214727059" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors font-bold text-[#00ea8c]">RSVP Registration Page</a></li>
               </ul>
@@ -1447,7 +1193,7 @@ export default function App() {
                 Sudlon, Maguikay, Mandaue City, 6014 Cebu, Philippines
               </p>
               <p className="text-xs text-slate-300">
-                Email: slsbatch2001@gmail.com
+                Email: charles8mendoza@gmail.com
               </p>
             </div>
 
