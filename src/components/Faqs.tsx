@@ -411,23 +411,18 @@ export default function Faqs() {
 
             {/* Right side BPI QR Mock */}
             <div className="md:col-span-5 flex flex-col items-center justify-center">
-              <div className="bg-white text-slate-800 p-5 rounded-3xl shadow-lg w-full max-w-[260px] border border-indigo-100 flex flex-col items-center">
-                <span className="text-red-600 font-black tracking-widest text-lg font-display mb-1">BPI</span>
-                <span className="text-[10px] text-slate-500 font-semibold mb-3">batch2001</span>
+              <div className="bg-[#dc2626] text-white p-6 rounded-3xl shadow-xl w-full max-w-[300px] flex flex-col items-center border border-red-500">
+                <span className="text-white font-black tracking-widest text-2xl font-display mb-0.5">BPI</span>
+                <span className="text-[10px] text-red-100 font-bold uppercase tracking-widest mb-4">batch2001</span>
                 
                 {/* Real high-quality BPI InstaPay QR Code image */}
-                <div className="bg-slate-50 border border-slate-100 p-3 rounded-2xl w-full aspect-square flex items-center justify-center relative overflow-hidden group/qr">
+                <div className="bg-white p-4 rounded-2xl w-full aspect-square flex items-center justify-center relative overflow-hidden group/qr shadow-inner">
                   <img 
                     src="/cash-pledge-qr.png" 
                     alt="BPI InstaPay QR Code for Cash Pledge" 
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-contain transition-transform duration-350 group-hover/qr:scale-105"
                   />
-                </div>
-
-                <div className="mt-3 text-center">
-                  <p className="text-[10px] text-slate-400">Scan via BPI or standard GCash / Maya banking apps</p>
-                  <p className="text-xs font-bold text-slate-800 mt-1">CH****L QU****O PI*O</p>
                 </div>
               </div>
             </div>
