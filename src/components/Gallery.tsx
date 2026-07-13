@@ -177,15 +177,50 @@ export default function Gallery() {
           const { createClient } = await import('@supabase/supabase-js');
           const supabase = createClient(url, key);
           
-          const { data: files, error } = await supabase.storage.from('gallery-photos').list('TreePlanting', {
+          let folderToUse = 'TreePlanting';
+          let { data: files, error } = await supabase.storage.from('gallery-photos').list('TreePlanting', {
             limit: 60,
             sortBy: { column: 'name', order: 'asc' }
           });
           
-          if (!error && files && files.length > 0) {
+          let isEmpty = !files || files.length === 0 || (files.length === 1 && files[0].name === '.emptyFolderPlaceholder');
+          
+          if (error || isEmpty) {
+            console.log('⚠️ No client files in "TreePlanting" folder. Trying "treeplanting" lowercase...');
+            const fallbackResult = await supabase.storage.from('gallery-photos').list('treeplanting', {
+              limit: 60,
+              sortBy: { column: 'name', order: 'asc' }
+            });
+            
+            const isFallbackEmpty = !fallbackResult.data || fallbackResult.data.length === 0 || 
+                                    (fallbackResult.data.length === 1 && fallbackResult.data[0].name === '.emptyFolderPlaceholder');
+            
+            if (!fallbackResult.error && !isFallbackEmpty) {
+              files = fallbackResult.data;
+              folderToUse = 'treeplanting';
+              isEmpty = false;
+            } else {
+              console.log('⚠️ No client files in "treeplanting" folder. Trying "Tree Planting" with space...');
+              const spaceResult = await supabase.storage.from('gallery-photos').list('Tree Planting', {
+                limit: 60,
+                sortBy: { column: 'name', order: 'asc' }
+              });
+              
+              const isSpaceEmpty = !spaceResult.data || spaceResult.data.length === 0 || 
+                                   (spaceResult.data.length === 1 && spaceResult.data[0].name === '.emptyFolderPlaceholder');
+              
+              if (!spaceResult.error && !isSpaceEmpty) {
+                files = spaceResult.data;
+                folderToUse = 'Tree Planting';
+                isEmpty = false;
+              }
+            }
+          }
+          
+          if (files && files.length > 0 && !isEmpty) {
             const validFiles = files.filter(f => f.name !== '.emptyFolderPlaceholder' && !f.name.startsWith('.') && f.id);
             const photos = validFiles.map((f, index) => {
-              const { data: { publicUrl } } = supabase.storage.from('gallery-photos').getPublicUrl(`TreePlanting/${f.name}`);
+              const { data: { publicUrl } } = supabase.storage.from('gallery-photos').getPublicUrl(`${folderToUse}/${f.name}`);
               return {
                 id: `supabase-client-tree-${index}`,
                 album: 'Tree Planting',
