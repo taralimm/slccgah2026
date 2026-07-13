@@ -9,6 +9,7 @@ export default function Gallery() {
   // Supabase live photos state
   const [supabasePhotos, setSupabasePhotos] = useState<any[]>([]);
   const [musicfestPhotos, setMusicfestPhotos] = useState<any[]>([]);
+  const [treeplantingPhotos, setTreeplantingPhotos] = useState<any[]>([]);
   const [supabaseConfigured, setSupabaseConfigured] = useState<boolean>(false);
   const [loadingSupabase, setLoadingSupabase] = useState<boolean>(false);
 
@@ -64,7 +65,28 @@ export default function Gallery() {
         return attemptDirectClientMusicFest();
       });
 
-    Promise.all([fetchPickleball, fetchMusicFest]).finally(() => {
+    // 3. Fetch Tree Planting photos
+    const fetchTreePlanting = fetch('/api/treeplanting-photos')
+      .then(res => {
+        if (!res.ok) throw new Error('TreePlanting HTTP error');
+        return res.json();
+      })
+      .then(data => {
+        if (!active) return;
+        if (data.configured && data.photos && data.photos.length > 0) {
+          setTreeplantingPhotos(data.photos);
+          setSupabaseConfigured(true);
+        } else {
+          return attemptDirectClientTreePlanting();
+        }
+      })
+      .catch(err => {
+        if (!active) return;
+        console.warn('Backend TreePlanting API fetch failed, trying direct client fallback:', err);
+        return attemptDirectClientTreePlanting();
+      });
+
+    Promise.all([fetchPickleball, fetchMusicFest, fetchTreePlanting]).finally(() => {
       if (active) setLoadingSupabase(false);
     });
 
@@ -146,6 +168,45 @@ export default function Gallery() {
       }
     }
 
+    async function attemptDirectClientTreePlanting() {
+      try {
+        const url = import.meta.env.VITE_SUPABASE_URL || 'https://dnqtrirprghssnznyho.supabase.co';
+        const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+        
+        if (url && key && !url.includes('your-supabase-project')) {
+          const { createClient } = await import('@supabase/supabase-js');
+          const supabase = createClient(url, key);
+          
+          const { data: files, error } = await supabase.storage.from('gallery-photos').list('TreePlanting', {
+            limit: 60,
+            sortBy: { column: 'name', order: 'asc' }
+          });
+          
+          if (!error && files && files.length > 0) {
+            const validFiles = files.filter(f => f.name !== '.emptyFolderPlaceholder' && !f.name.startsWith('.') && f.id);
+            const photos = validFiles.map((f, index) => {
+              const { data: { publicUrl } } = supabase.storage.from('gallery-photos').getPublicUrl(`TreePlanting/${f.name}`);
+              return {
+                id: `supabase-client-tree-${index}`,
+                album: 'Tree Planting',
+                url: publicUrl,
+                title: '',
+                desc: '',
+                isSupabase: true
+              };
+            });
+            
+            if (active && photos.length > 0) {
+              setTreeplantingPhotos(photos);
+              setSupabaseConfigured(true);
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Client-side direct Supabase fallback list failed for TreePlanting:', err);
+      }
+    }
+
     return () => {
       active = false;
     };
@@ -158,15 +219,18 @@ export default function Gallery() {
       ? GALLERY_DATA 
       : GALLERY_DATA.filter(img => img.album.toLowerCase().replace(/\s+/g, '') === galleryFilter.replace(/\s+/g, ''));
 
-    // 2. Gather live Supabase photos if filter corresponds to pickleball, musicfest, or all
+    // 2. Gather live Supabase photos if filter corresponds to pickleball, musicfest, treeplanting, or all
     if (galleryFilter === 'all') {
-      return [...supabasePhotos, ...musicfestPhotos, ...staticFiltered];
+      return [...supabasePhotos, ...musicfestPhotos, ...treeplantingPhotos, ...staticFiltered];
     } else if (galleryFilter === 'pickleball') {
       const staticPickleball = GALLERY_DATA.filter(img => img.album.toLowerCase() === 'pickleball');
       return [...supabasePhotos, ...staticPickleball];
     } else if (galleryFilter === 'musicfest') {
       const staticMusic = GALLERY_DATA.filter(img => img.album.toLowerCase().replace(/\s+/g, '') === 'musicfest');
       return [...musicfestPhotos, ...staticMusic];
+    } else if (galleryFilter === 'treeplanting') {
+      const staticTree = GALLERY_DATA.filter(img => img.album.toLowerCase().replace(/\s+/g, '') === 'treeplanting');
+      return [...treeplantingPhotos, ...staticTree];
     } else {
       return staticFiltered;
     }
@@ -185,6 +249,11 @@ export default function Gallery() {
         ...musicfestPhotos,
         ...GALLERY_DATA.filter(img => img.album.toLowerCase().replace(/\s+/g, '') === 'musicfest')
       ]
+    : galleryFilter === 'treeplanting'
+    ? [
+        ...treeplantingPhotos,
+        ...GALLERY_DATA.filter(img => img.album.toLowerCase().replace(/\s+/g, '') === 'treeplanting')
+      ]
     : [];
 
   // Reset slide index when gallery filter changes to avoid out of bounds or sudden jumps
@@ -201,7 +270,7 @@ export default function Gallery() {
 
   // Auto-slide side effect for the interactive slideshow
   useEffect(() => {
-    const isSlideshowVisible = galleryFilter === 'pickleball' || galleryFilter === 'musicfest';
+    const isSlideshowVisible = galleryFilter === 'pickleball' || galleryFilter === 'musicfest' || galleryFilter === 'treeplanting';
     if (!autoplay || activeCarouselPhotos.length <= 1 || !isSlideshowVisible) return;
     const interval = setInterval(() => {
       setSlideIndex(prev => (prev + 1) % activeCarouselPhotos.length);
@@ -259,7 +328,10 @@ export default function Gallery() {
             🎸 Louisian Music Fest
           </button>
           <button 
-            onClick={() => setGalleryFilter('treeplanting')}
+            onClick={() => {
+              setGalleryFilter('treeplanting');
+              setSlideIndex(0);
+            }}
             className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 ${galleryFilter === 'treeplanting' ? 'bg-[#0038a8] text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-250'}`}
           >
             🌳 Tree Planting
@@ -285,7 +357,7 @@ export default function Gallery() {
         </div>
 
         {/* --- DYNAMIC SLIDESHOW SECTION --- */}
-        {(galleryFilter === 'pickleball' || galleryFilter === 'musicfest') && activeCarouselPhotos.length > 0 && (
+        {(galleryFilter === 'pickleball' || galleryFilter === 'musicfest' || galleryFilter === 'treeplanting') && activeCarouselPhotos.length > 0 && (
           <div className="mb-12 bg-slate-900 rounded-2xl overflow-hidden shadow-xl border border-slate-800">
             <div className="p-4 sm:p-6 border-b border-slate-800 bg-slate-950 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
@@ -295,7 +367,7 @@ export default function Gallery() {
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-[#38bdf8]"></span>
                   </span>
                   <h2 className="text-white text-lg font-bold flex items-center gap-2">
-                    {galleryFilter === 'pickleball' ? 'Pickleball Tournament Carousel' : 'Louisian Music Fest Carousel'}
+                    {galleryFilter === 'pickleball' ? 'Pickleball Tournament Carousel' : galleryFilter === 'musicfest' ? 'Louisian Music Fest Carousel' : 'Tree Planting Activity Carousel'}
                   </h2>
                 </div>
               </div>
@@ -327,7 +399,7 @@ export default function Gallery() {
               {activeCarouselPhotos[slideIndex] ? (
                 <img 
                   src={activeCarouselPhotos[slideIndex].url} 
-                  alt={galleryFilter === 'pickleball' ? 'Pickleball Match Highlights' : 'Music Fest Highlights'}
+                  alt={galleryFilter === 'pickleball' ? 'Pickleball Match Highlights' : galleryFilter === 'musicfest' ? 'Music Fest Highlights' : 'Tree Planting Highlights'}
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover transition-all duration-700 ease-in-out scale-102"
                 />
@@ -388,13 +460,42 @@ export default function Gallery() {
               Official Social Roll
             </span>
             <h3 className="text-xl sm:text-2xl font-black font-display tracking-tight text-white leading-tight">
-              {galleryFilter === 'pickleball' ? 'Pickleball Tournament Photo Albums' : 'Compilation of All Pre-Homecoming Events Photos'}
+              {galleryFilter === 'pickleball' ? 'Pickleball Tournament Photo Albums' : galleryFilter === 'treeplanting' ? 'Tree Planting Outreach Album' : 'Compilation of All Pre-Homecoming Events Photos'}
             </h3>
             <p className="text-blue-100 text-xs sm:text-sm max-w-3xl leading-relaxed">
               {galleryFilter === 'pickleball' 
                 ? 'Relive the smash hits, quick rallies, and fellowship matches. Check out the dedicated full photo albums for both Day 1 and Day 2 of the tournament!'
+                : galleryFilter === 'treeplanting'
+                ? 'View Class of 2001 environment restoration milestones. Thank you to all the batch volunteers who got their hands dirty to plant hope and restore our green canopy!'
                 : 'Our official action cameras captured wonderful moments across all pre-homecoming outreach activities, sports tournaments, and community missions. Browse the snapshot compilation below. Detailed comprehensive individual albums are hosted directly on our official social streams on Facebook.'}
             </p>
+            {galleryFilter === 'all' && (
+              <div className="mt-4 pt-4 border-t border-blue-800/60 flex flex-col sm:flex-row sm:items-center gap-3">
+                <span className="text-xs font-bold text-[#00ea8c] flex items-center gap-1.5 shrink-0 uppercase tracking-wider">
+                  <Play className="w-3.5 h-3.5 fill-[#00ea8c]" /> Event Video Clips:
+                </span>
+                <div className="flex flex-wrap gap-2.5">
+                  <a 
+                    href="https://www.facebook.com/reel/1536589044523434"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-[#00ea8c] hover:text-[#0038a8] rounded-lg text-xs font-bold transition-all text-white border border-white/15"
+                  >
+                    <span>🏓 Pickleball Reel</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                  <a 
+                    href="https://www.facebook.com/reel/1045232001369187"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-[#00ea8c] hover:text-[#0038a8] rounded-lg text-xs font-bold transition-all text-white border border-white/15"
+                  >
+                    <span>🎸 Music Fest Reel</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
           {galleryFilter === 'pickleball' && (
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0 justify-center">
@@ -426,7 +527,7 @@ export default function Gallery() {
         )}
 
         {/* Masonry-style Grid content with zoom states - ONLY shown for non-carousel filters or for static albums */}
-        {galleryFilter !== 'pickleball' && galleryFilter !== 'musicfest' && (
+        {galleryFilter !== 'pickleball' && galleryFilter !== 'musicfest' && galleryFilter !== 'treeplanting' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {filteredGallery.map((img, idx) => (
               <div 
