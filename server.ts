@@ -147,6 +147,63 @@ app.get('/api/musicfest-photos', async (req, res) => {
   }
 });
 
+// 3. List live treeplanting photos from Supabase bucket
+app.get('/api/treeplanting-photos', async (req, res) => {
+  try {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return res.json({ configured: false, photos: [] });
+    }
+    
+    let folderToUse = 'TreePlanting';
+    let { data: files, error } = await supabase.storage.from('gallery-photos').list('TreePlanting', {
+      limit: 60,
+      sortBy: { column: 'name', order: 'asc' }
+    });
+
+    const isEmpty = !files || files.length === 0 || (files.length === 1 && files[0].name === '.emptyFolderPlaceholder');
+
+    if (error || isEmpty) {
+      console.log('⚠️ No files in "TreePlanting" folder. Trying "treeplanting" (lowercase)...');
+      const fallbackResult = await supabase.storage.from('gallery-photos').list('treeplanting', {
+        limit: 60,
+        sortBy: { column: 'name', order: 'asc' }
+      });
+      
+      const isFallbackEmpty = !fallbackResult.data || fallbackResult.data.length === 0 || 
+                              (fallbackResult.data.length === 1 && fallbackResult.data[0].name === '.emptyFolderPlaceholder');
+      
+      if (!fallbackResult.error && !isFallbackEmpty) {
+        files = fallbackResult.data;
+        folderToUse = 'treeplanting';
+      }
+    }
+
+    if (!files || files.length === 0) {
+      return res.json({ configured: true, photos: [], message: "No photos found in folder 'TreePlanting' or 'treeplanting'." });
+    }
+
+    const photos = files
+      .filter(f => f.name !== '.emptyFolderPlaceholder' && !f.name.startsWith('.') && f.id)
+      .map((f, index) => {
+        const filePath = folderToUse ? `${folderToUse}/${f.name}` : f.name;
+        const { data: { publicUrl } } = supabase.storage.from('gallery-photos').getPublicUrl(filePath);
+        return {
+          id: `supabase-tree-${index}`,
+          album: 'Tree Planting',
+          url: publicUrl,
+          title: '', 
+          desc: '',  
+          isSupabase: true
+        };
+      });
+
+    res.json({ configured: true, photos });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ------------------- VITE SETUP AND SERVER START -------------------
 
 async function start() {
