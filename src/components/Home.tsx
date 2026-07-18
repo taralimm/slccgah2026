@@ -221,6 +221,10 @@ export default function Home({ countdown, navigateToTab }: HomeProps) {
                         target.src = fallbacks[nextIndex];
                       } else if (currentSrc.toLowerCase().includes('musicfest')) {
                         target.src = "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=80";
+                      } else if (currentSrc.toLowerCase().includes('treeplanting')) {
+                        target.src = "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80";
+                      } else if (currentSrc.toLowerCase().includes('medical')) {
+                        target.src = "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80";
                       }
                     }}
                   />
