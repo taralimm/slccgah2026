@@ -17,10 +17,10 @@ export default function Home({ countdown, navigateToTab }: HomeProps) {
             <span className="text-3xl animate-bounce">📢</span>
             <div>
               <span className="inline-block px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 font-extrabold text-[10px] uppercase tracking-wider mb-1 sm:mb-0 sm:mr-2">
-                Special Registration Promo
+                Registration Announcement
               </span>
               <p className="text-sm sm:text-base font-semibold">
-                Starting today, <span className="font-extrabold text-amber-300 underline">July 8 up to July 26</span>, registration fee is dropped to <span className="font-extrabold text-amber-300 text-lg">PHP 450</span>. Starting July 27, price will go back to PHP 500.
+                Please be informed that starting today, July 27, the registration fee is back to <span className="font-extrabold text-amber-300 text-lg">PHP 500</span>.
               </p>
             </div>
           </div>
@@ -31,7 +31,7 @@ export default function Home({ countdown, navigateToTab }: HomeProps) {
               rel="noopener noreferrer"
               className="bg-amber-400 hover:bg-amber-300 text-slate-950 px-5 py-2 rounded-full font-black text-xs sm:text-sm uppercase tracking-wider shadow-sm transition-all duration-200"
             >
-              Secure Spot (PHP 450)
+              Secure Spot (PHP 500)
             </a>
           </div>
         </div>
